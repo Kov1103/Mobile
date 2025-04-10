@@ -34,9 +34,10 @@ export default function RootLayout() {
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <Stack screenOptions={{ headerShown: false }}>
-        {!hasSeenOnboarding && (
+        {/* {!hasSeenOnboarding && (
           <Stack.Screen name="onboarding/index" />
-        )}
+        )} */}
+        <Stack.Screen name="onboarding/index" />
         <Stack.Screen name="launch/index" />
         <Stack.Screen name="+not-found" />
       </Stack>
