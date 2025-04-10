@@ -3,34 +3,41 @@ import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
-import { useEffect } from 'react';
-import 'react-native-reanimated';
-
+import { useEffect, useState } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useColorScheme } from '@/hooks/useColorScheme';
 
-// Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
-  const [loaded] = useFonts({
+  const [fontsLoaded] = useFonts({
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
   });
+  const [hasSeenOnboarding, setHasSeenOnboarding] = useState<boolean | null>(null);
 
   useEffect(() => {
-    if (loaded) {
-      SplashScreen.hideAsync();
-    }
-  }, [loaded]);
+    const prepare = async () => {
+      const value = await AsyncStorage.getItem('hasSeenOnboarding');
+      setHasSeenOnboarding(value === 'true');
+      if (fontsLoaded) {
+        await SplashScreen.hideAsync();
+      }
+    };
+    prepare();
+  }, [fontsLoaded]);
 
-  if (!loaded) {
+  if (!fontsLoaded || hasSeenOnboarding === null) {
     return null;
   }
 
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+      <Stack screenOptions={{ headerShown: false }}>
+        {!hasSeenOnboarding && (
+          <Stack.Screen name="onboarding/index" />
+        )}
+        <Stack.Screen name="launch/index" />
         <Stack.Screen name="+not-found" />
       </Stack>
       <StatusBar style="auto" />
