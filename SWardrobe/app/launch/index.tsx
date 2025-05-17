@@ -1,26 +1,31 @@
 import SwButton from '@/components/shared/SwButton';
 import SwLogo from '@/components/shared/SwLogo';
+import { Colors } from '@/constants/Colors';
+import { useRouter } from 'expo-router';
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image, SafeAreaView } from 'react-native';
+import { View, Text, StyleSheet, SafeAreaView } from 'react-native';
 
 const LaunchScreen = ({ navigation }: any) => {
+  const router = useRouter();
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.centered}>
-        <SwLogo height={120} hasTitle={true} />
+      <View style={styles.logo}>
+        <SwLogo hasTitle={true} />
       </View>
       <View style={styles.buttonContainer}>
         <SwButton
           label="Log In"
-          onPress={() => navigation.navigate('Login')}
-          backgroundColor="#EFAF9B"
-          textColor="#FFFFFF"
+          onPress={() => router.replace("/authen/login")}
+          backgroundColor={Colors.pink}
+          textColor={Colors.white}
+          width={'100%'}
         />
         <SwButton
           label="Sign Up"
-          onPress={() => navigation.navigate('Signup')}
-          backgroundColor="#FFF4EF"
-          textColor="#EFAF9B"
+          onPress={() => router.replace("/authen/signup")}
+          backgroundColor={Colors.lightYellow}
+          textColor={Colors.pink}
+          width={'100%'}
         />
       </View>
       <Text style={styles.footer}>Sticket Group</Text>
@@ -33,62 +38,29 @@ export default LaunchScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
-    justifyContent: 'space-between', // Đảm bảo có khoảng cách giữa logo và footer
+    backgroundColor: Colors.white,
+    justifyContent: 'space-between',
     alignItems: 'center',
     paddingVertical: 40,
   },
-  centered: {
-    flex: 1, // Chiếm không gian giữa logo và footer
-    justifyContent: 'center', // Căn giữa theo chiều dọc
-    alignItems: 'center', // Căn giữa theo chiều ngang
-  },
   logo: {
-    height: 100,
-    marginBottom: 20, // Khoảng cách giữa logo và title (nếu có)
-  },
-  title: {
-    fontSize: 28,
-    fontWeight: '600',
-    color: '#EFAF9B',
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'flex-end',
   },
   buttonContainer: {
-    width: '80%',
+    width: '50%',
     alignItems: 'center',
     gap: 12,
-    marginTop: 'auto',  // Đảm bảo các nút nằm giữa logo và footer
-    marginBottom: 'auto', // Đảm bảo khoảng cách với footer
-  },
-  loginButton: {
-    backgroundColor: '#EFAF9B',
-    width: '100%',
-    paddingVertical: 14,
-    borderRadius: 30,
-    alignItems: 'center',
-  },
-  loginText: {
-    color: 'white',
-    fontWeight: '600',
-    fontSize: 16,
-  },
-  signupButton: {
-    backgroundColor: '#FFF4EF',
-    width: '100%',
-    paddingVertical: 14,
-    borderRadius: 30,
-    alignItems: 'center',
-  },
-  signupText: {
-    color: '#EFAF9B',
-    fontWeight: '600',
-    fontSize: 16,
+    marginBottom: 50,
   },
   footer: {
     color: '#EFAF9B',
-    fontSize: 12,
-    letterSpacing: 2,
-    paddingTop: 20, // Thêm paddingTop tại đây
-    marginBottom: 10, // Đảm bảo footer cách đáy màn hình
+    fontSize: 20,
+    fontFamily: 'Inter-Regular',
+    letterSpacing: 8,
+    paddingTop: 20,
+    marginBottom: 10, 
   },
 });
 

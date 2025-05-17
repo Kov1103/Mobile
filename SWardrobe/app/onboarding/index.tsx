@@ -1,7 +1,8 @@
-import { View, Text, StyleSheet, Image, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, Image, Dimensions, SafeAreaView } from 'react-native';
 import AppIntroSlider from 'react-native-app-intro-slider';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useRouter } from 'expo-router';
+import { Colors } from '@/constants/Colors';
 
 const { width, height } = Dimensions.get('window');
 
@@ -36,7 +37,7 @@ export default function OnboardingScreen() {
     };
 
     const renderItem = ({ item }: any) => (
-        <View style={styles.slide}>
+        <View style={styles.background}>
             <View style={styles.imageContainer}>
                 <Image source={item.image} style={styles.image} />
             </View>
@@ -61,48 +62,46 @@ export default function OnboardingScreen() {
     );
 
     return (
-        <AppIntroSlider
-            data={slides}
-            renderItem={renderItem}
-            onDone={handleDone}
-            showSkipButton={true}
-            onSkip={handleDone}
-            renderNextButton={renderNextButton}
-            renderDoneButton={renderDoneButton}
-            activeDotStyle={styles.activeDot}
-            dotStyle={styles.dot}
-        />
+        <SafeAreaView style={styles.background}>
+            <AppIntroSlider
+                data={slides}
+                renderItem={renderItem}
+                onDone={handleDone}
+                showSkipButton={true}
+                onSkip={handleDone}
+                renderNextButton={renderNextButton}
+                renderDoneButton={renderDoneButton}
+                activeDotStyle={styles.activeDot}
+                dotStyle={styles.dot}
+            />
+        </SafeAreaView>
     );
 }
 
 const styles = StyleSheet.create({
-    slide: {
+    background: {
         flex: 1,
-        backgroundColor: '#FDF8F6', // màu nền giống demo
+        backgroundColor: Colors.white,
     },
     imageContainer: {
         borderBottomLeftRadius: 30,
-        borderBottomRightRadius: 30,
         overflow: 'hidden',
-        height: height * 0.55,
+        height: height * 0.6,
+        backgroundColor: Colors.lightYellow
     },
     image: {
-        width: '100%',
-        height: '100%',
+        height: '90%',
         resizeMode: 'cover',
+        borderBottomLeftRadius: 30,
     },
     bottomSheet: {
         flex: 0.45,
-        backgroundColor: '#fff',
         marginHorizontal: 10,
-        borderTopLeftRadius: 30,
-        borderTopRightRadius: 30,
         paddingHorizontal: 30,
         paddingTop: 100,
         paddingBottom: 100,
         alignItems: 'center',
-        justifyContent: 'space-between',
-        height: height * 0.35,
+        justifyContent: 'center',
     },
     title: {
         fontSize: 20,

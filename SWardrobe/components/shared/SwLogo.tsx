@@ -1,12 +1,14 @@
 import React from 'react';
 import { View, Image, Text, StyleSheet, ImageStyle } from 'react-native';
+import TitleText from './text/TitleText';
 
 interface SwLogoProps {
     height?: number;
     hasTitle?: boolean;
+    fontSize?: number;
 }
 
-const SwLogo: React.FC<SwLogoProps> = ({ height = 100, hasTitle = true }) => {
+const SwLogo: React.FC<SwLogoProps> = ({ height = 100, hasTitle = true, fontSize = 45 }) => {
     return (
         <View style={styles.container}>
             <Image
@@ -14,7 +16,9 @@ const SwLogo: React.FC<SwLogoProps> = ({ height = 100, hasTitle = true }) => {
                 style={[styles.logo, { height } as ImageStyle]}
                 resizeMode="contain"
             />
-            {hasTitle && <Text style={styles.title}>SWardrobe</Text>}
+            {hasTitle && (
+                <TitleText style={[styles.title, { fontSize }]}>{'SWardrobe'}</TitleText>
+            )}
         </View>
     );
 };
@@ -30,8 +34,6 @@ const styles = StyleSheet.create({
         aspectRatio: 1, // giữ tỉ lệ hình vuông khi thay đổi chiều cao
     },
     title: {
-        fontSize: 28,
-        fontWeight: '600',
         color: '#EFAF9B',
     },
 });
