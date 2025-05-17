@@ -5,7 +5,7 @@ type ContentTextProps = React.PropsWithChildren<{
     style?: TextStyle | TextStyle[];
 }>;
 
-export default function TitleText(props: ContentTextProps) {
+export default function ContentText(props: ContentTextProps) {
     return (
         <Text
             style={[

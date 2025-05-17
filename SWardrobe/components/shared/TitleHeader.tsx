@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import TitleText from './text/TitleText';
+import { Colors } from '@/constants/Colors';
 
 interface TitleHeaderProps {
   title: string;
@@ -16,7 +17,7 @@ const TitleHeader: React.FC<TitleHeaderProps> = ({ title, showBackButton = true 
     <View style={styles.container}>
       {showBackButton ? (
         <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
-          <Ionicons name="arrow-back" size={24} color="#333" />
+          <Ionicons name="arrow-back" size={24} color={Colors.black} />
         </TouchableOpacity>
       ) : (
         <View style={styles.placeholder} />
@@ -33,19 +34,17 @@ const styles = StyleSheet.create({
   container: {
     height: 60,
     paddingHorizontal: 16,
-    backgroundColor: '#fff',
+    backgroundColor: Colors.white,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    borderBottomColor: '#ddd',
-    borderBottomWidth: 1,
   },
   backButton: {
     padding: 8,
   },
   title: {
     fontSize: 20,
-    color: '#F4B5A4',
+    color: Colors.pink,
     textAlign: 'center',
     flex: 1,
   },

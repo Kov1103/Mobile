@@ -3,6 +3,10 @@ import AppIntroSlider from 'react-native-app-intro-slider';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useRouter } from 'expo-router';
 import { Colors } from '@/constants/Colors';
+import TitleText from '@/components/shared/text/TitleText';
+import ContentText from '@/components/shared/text/ContentText';
+import SwButton from '@/components/shared/SwButton';
+import { useRef, useState } from 'react';
 
 const { width, height } = Dimensions.get('window');
 
@@ -30,6 +34,8 @@ const slides = [
 
 export default function OnboardingScreen() {
     const router = useRouter();
+    const sliderRef = useRef<any>(null);
+    const [activeSlide, setActiveSlide] = useState(0);
 
     const handleDone = async () => {
         await AsyncStorage.setItem('hasSeenOnboarding', 'true');
@@ -43,23 +49,61 @@ export default function OnboardingScreen() {
             </View>
 
             <View style={styles.bottomSheet}>
-                <Text style={styles.title}>{item.title}</Text>
-                <Text style={styles.text}>{item.text}</Text>
+                <TitleText style={styles.title}>{item.title}</TitleText>
+                <ContentText style={styles.text}>{item.text}</ContentText>
             </View>
         </View>
     );
 
-    const renderNextButton = () => (
-        <View style={styles.button}>
-            <Text style={styles.buttonText}>Next</Text>
-        </View>
-    );
+    const renderPagination = () => {
+        const isLastSlide = activeSlide === slides.length - 1;
 
-    const renderDoneButton = () => (
-        <View style={styles.button}>
-            <Text style={styles.buttonText}>Get Started</Text>
-        </View>
-    );
+        return (
+            <View style={styles.paginationContainer}>
+                <View style={styles.dotsWrapper}>
+                    {slides.map((_, i) => (
+                        <View
+                            key={i}
+                            style={[
+                                styles.dot,
+                                activeSlide === i ? styles.activeDot : null
+                            ]}
+                        />
+                    ))}
+                </View>
+
+                <View>
+                    {isLastSlide ? (
+                        <SwButton
+                            label="Get Started"
+                            onPress={handleDone}
+                            backgroundColor={Colors.pink}
+                            textColor={Colors.darkPink}
+                            height={41}
+                            fontSize={20}
+                        />
+                    ) : (
+                        <SwButton
+                            label="Next"
+                            onPress={() => {
+                                console.log('Next button pressed', activeSlide);
+                                if (sliderRef.current) {
+                                    sliderRef.current.goToSlide(activeSlide + 1);
+                                    setActiveSlide(activeSlide + 1);
+                                }
+                            }}
+                            backgroundColor={Colors.pink}
+                            textColor={Colors.darkPink}
+                            width={133}
+                            height={41}
+                            fontSize={20}
+                        />
+                    )}
+                </View>
+            </View>
+        );
+    };
+
 
     return (
         <SafeAreaView style={styles.background}>
@@ -69,10 +113,8 @@ export default function OnboardingScreen() {
                 onDone={handleDone}
                 showSkipButton={true}
                 onSkip={handleDone}
-                renderNextButton={renderNextButton}
-                renderDoneButton={renderDoneButton}
-                activeDotStyle={styles.activeDot}
-                dotStyle={styles.dot}
+                renderPagination={renderPagination}
+                ref={(ref) => (sliderRef.current = ref)}
             />
         </SafeAreaView>
     );
@@ -104,41 +146,42 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     title: {
-        fontSize: 20,
-        fontWeight: '700',
-        color: '#E9957C',
+        fontSize: 28,
+        color: Colors.pink,
         textAlign: 'center',
         marginBottom: 15,
     },
     text: {
-        fontSize: 13,
-        color: '#333',
+        fontSize: 14,
+        color: Colors.black,
         textAlign: 'center',
     },
     button: {
-        backgroundColor: '#E9957C',
-        paddingVertical: 10,
-        paddingHorizontal: 25,
-        borderRadius: 20,
-        marginBottom: 20,
         alignSelf: 'flex-end',
-    },
-    buttonText: {
-        color: '#fff',
-        fontWeight: '600',
-        fontSize: 14,
     },
     dot: {
         width: 8,
         height: 8,
         borderRadius: 4,
-        backgroundColor: '#EEDDD3',
+        backgroundColor: Colors.lightYellow,
         marginHorizontal: 4,
     },
     activeDot: {
-        backgroundColor: '#E9957C',
+        backgroundColor: Colors.pink,
         width: 20,
         height: 8,
         borderRadius: 4,
+    },
+    paginationContainer: {
+        position: 'absolute',
+        bottom: 30,
+        left: 20,
+        right: 20,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    },
+    dotsWrapper: {
+        flexDirection: 'row',
     },
 });

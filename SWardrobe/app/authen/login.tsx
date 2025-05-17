@@ -2,9 +2,9 @@ import SwButton from '@/components/shared/SwButton';
 import ContentText from '@/components/shared/text/ContentText';
 import TitleText from '@/components/shared/text/TitleText';
 import TitleHeader from '@/components/shared/TitleHeader';
+import { Colors } from '@/constants/Colors';
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, KeyboardAvoidingView, Platform, Alert, SafeAreaView } from 'react-native';
-import { Colors } from 'react-native/Libraries/NewAppScreen';
+import { View, TextInput, StyleSheet, KeyboardAvoidingView, Platform, Alert, SafeAreaView } from 'react-native';
 
 interface LoginProps {
   navigation: any; // hoặc bạn dùng expo-router thì dùng useRouter
@@ -20,10 +20,7 @@ export default function Login({ navigation }: LoginProps) {
       Alert.alert('Error', 'Please fill email and password');
       return;
     }
-    // Giả sử đăng nhập thành công
     Alert.alert('Success', `Logged in as ${email}`);
-    // Điều hướng tiếp theo nếu muốn
-    // navigation.navigate('Home');
   };
 
   return (
@@ -67,7 +64,9 @@ export default function Login({ navigation }: LoginProps) {
             width={'50%'}
           />
         </View>
-        <View style={styles.signUp}></View>
+        <View style={styles.signUp}>
+          <ContentText>or sign up with</ContentText>
+        </View>
       </KeyboardAvoidingView>
     </SafeAreaView>
   );

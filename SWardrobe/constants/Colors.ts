@@ -4,4 +4,5 @@ export const Colors = {
   lightYellow: '#FAF0E6',
   black: '#363130',
   white: '#FFFFFF',
+  lightPink: '#DCBEB6'
 };

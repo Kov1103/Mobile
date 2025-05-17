@@ -1,7 +1,6 @@
 import React from 'react';
 import {
   TouchableOpacity,
-  Text,
   StyleSheet,
   StyleProp,
   ViewStyle,
@@ -17,6 +16,7 @@ interface SwButtonProps {
   width?: DimensionValue;  // sửa lại đây
   height?: DimensionValue; // sửa lại đây
   style?: StyleProp<ViewStyle>;
+  fontSize?: number;
 }
 
 const SwButton: React.FC<SwButtonProps> = ({
@@ -27,6 +27,7 @@ const SwButton: React.FC<SwButtonProps> = ({
   width,
   height,
   style,
+  fontSize = 20,
 }) => {
   const customStyle: ViewStyle = {
     backgroundColor,
@@ -42,8 +43,7 @@ const SwButton: React.FC<SwButtonProps> = ({
 
   return (
     <TouchableOpacity style={[styles.button, customStyle, style]} onPress={onPress}>
-      {/* <Text style={[styles.text, { color: textColor }]}>{label}</Text> */}
-      <TitleText style={{ fontSize: 20, color: textColor }}>
+      <TitleText style={{ fontSize: fontSize, color: textColor }}>
         {label}
       </TitleText>
     </TouchableOpacity>
@@ -57,10 +57,6 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  text: {
-    fontWeight: '600',
-    fontSize: 16,
   },
 });
 

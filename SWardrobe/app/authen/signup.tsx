@@ -2,9 +2,9 @@ import SwButton from '@/components/shared/SwButton';
 import ContentText from '@/components/shared/text/ContentText';
 import TitleText from '@/components/shared/text/TitleText';
 import TitleHeader from '@/components/shared/TitleHeader';
+import { Colors } from '@/constants/Colors';
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, KeyboardAvoidingView, Platform, Alert, SafeAreaView } from 'react-native';
-import { Colors } from 'react-native/Libraries/NewAppScreen';
 
 interface LoginProps {
   navigation: any; // hoặc bạn dùng expo-router thì dùng useRouter
