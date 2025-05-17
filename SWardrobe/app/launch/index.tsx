@@ -1,3 +1,5 @@
+import SwButton from '@/components/shared/SwButton';
+import SwLogo from '@/components/shared/SwLogo';
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image, SafeAreaView } from 'react-native';
 
@@ -5,25 +7,22 @@ const LaunchScreen = ({ navigation }: any) => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.centered}>
-        <Image
-          source={require('../../assets/logo.png')}
-          style={styles.logo}
-          resizeMode="contain"
-        />
-        <Text style={styles.title}>SWardrobe</Text>
+        <SwLogo height={120} hasTitle={true} />
       </View>
-
-      {/* Chỉnh sửa buttonContainer */}
       <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.loginButton} onPress={() => navigation.navigate('Login')}>
-          <Text style={styles.loginText}>Log In</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.signupButton} onPress={() => navigation.navigate('Signup')}>
-          <Text style={styles.signupText}>Sign Up</Text>
-        </TouchableOpacity>
+        <SwButton
+          label="Log In"
+          onPress={() => navigation.navigate('Login')}
+          backgroundColor="#EFAF9B"
+          textColor="#FFFFFF"
+        />
+        <SwButton
+          label="Sign Up"
+          onPress={() => navigation.navigate('Signup')}
+          backgroundColor="#FFF4EF"
+          textColor="#EFAF9B"
+        />
       </View>
-
       <Text style={styles.footer}>Sticket Group</Text>
     </SafeAreaView>
   );
