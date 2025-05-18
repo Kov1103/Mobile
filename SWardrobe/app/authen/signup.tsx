@@ -1,73 +1,74 @@
 import SwButton from '@/components/shared/SwButton';
+import SwTextInput from '@/components/shared/SwTextInput';
+import BoldContentText from '@/components/shared/text/BoldContentText';
 import ContentText from '@/components/shared/text/ContentText';
 import TitleText from '@/components/shared/text/TitleText';
 import TitleHeader from '@/components/shared/TitleHeader';
 import { Colors } from '@/constants/Colors';
+import { router } from 'expo-router';
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, KeyboardAvoidingView, Platform, Alert, SafeAreaView } from 'react-native';
+import { View, StyleSheet, KeyboardAvoidingView, Platform, Alert, SafeAreaView, TouchableOpacity } from 'react-native';
+import { Image } from 'react-native';
 
-interface LoginProps {
+interface SignUpProps {
   navigation: any; // hoặc bạn dùng expo-router thì dùng useRouter
 }
 
-export default function Signup({ navigation }: LoginProps) {
+export default function SignUp({ navigation }: SignUpProps) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleLogin = () => {
+  const handleSignUP = () => {
     // Thêm logic xác thực ở đây
     if (email === '' || password === '') {
       Alert.alert('Error', 'Please fill email and password');
       return;
     }
-    // Giả sử đăng nhập thành công
     Alert.alert('Success', `Logged in as ${email}`);
-    // Điều hướng tiếp theo nếu muốn
-    // navigation.navigate('Home');
   };
 
   return (
     <SafeAreaView style={styles.container}>
-      <TitleHeader title="Log In"></TitleHeader>
+      <TitleHeader title="Create Account"></TitleHeader>
 
       <KeyboardAvoidingView style={styles.containerArea}
         behavior={Platform.select({ ios: 'padding', android: undefined })}
       >
-        <View style={styles.welcomeContainer}>
-          <TitleText style={styles.welcomeText}>Welcome</TitleText>
-          <ContentText style={styles.welcomeContentText}>Please enter your details to proceed.</ContentText>
-        </View>
-
         <View style={styles.inputContainer}>
-          <TextInput
-            style={styles.input}
-            placeholder="Email"
-            autoCapitalize="none"
-            keyboardType="email-address"
-            value={email}
-            onChangeText={setEmail}
-            textContentType="emailAddress"
-          />
-
-          <TextInput
-            style={styles.input}
-            placeholder="Password"
-            secureTextEntry
-            value={password}
-            onChangeText={setPassword}
-            textContentType="password"
-          />
+          <SwTextInput label="Full Name" type="default"></SwTextInput>
+          <SwTextInput label="Email" type="email" placeholder='Input Your Email'></SwTextInput>
+          <SwTextInput label="Mobile Number" type="default" placeholder='0123 456 789'></SwTextInput>
+          <SwTextInput label="Date of Birth" type="default" placeholder='DD/MM/YYYY'></SwTextInput>
+          <SwTextInput label="Password" type="password" placeholder='Enter password'></SwTextInput>
+          <SwTextInput label="Confirm Password" type="password" placeholder='Enter confirm password'></SwTextInput>
         </View>
         <View style={styles.buttonContainer}>
+          <ContentText style={{ textAlign: 'center', width: 195 }}>
+            By continuing, you agree to{' '}
+            <BoldContentText>Terms of Use</BoldContentText> and{' '}
+            <BoldContentText>Privacy Policy</BoldContentText>.
+          </ContentText>
           <SwButton
-            label="Log In"
-            onPress={handleLogin}
+            label="Sign Up"
+            onPress={handleSignUP}
             backgroundColor={Colors.pink}
             textColor={Colors.darkPink}
-            width={'50%'}
+            width={186}
+            height={41}
           />
         </View>
-        <View style={styles.signUp}></View>
+        <View style={styles.signUpContainer}>
+          <ContentText>or sign up with</ContentText>
+          <TouchableOpacity onPress={() => console.log('Facebook pressed')}>
+            <Image source={require('@/assets/icon/google-icon.png')} style={styles.icon} />
+          </TouchableOpacity>
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 5 }}>
+            <ContentText>Already have an account?</ContentText>
+            <TouchableOpacity onPress={() => router.push('/authen/login')}>
+              <ContentText style={{ color: Colors.darkPink }}>Log In</ContentText>
+            </TouchableOpacity>
+          </View>
+        </View>
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
@@ -83,26 +84,11 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: 30
   },
-  welcomeContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'flex-start',
-  },
-  welcomeText: {
-    fontSize: 20,
-    color: Colors.black,
-  },
-  welcomeContentText: {
-    fontSize: 14,
-    color: Colors.black,
-    marginTop: 10,
-  },
   inputContainer: {
-    flex: 1,
     justifyContent: 'center',
+    paddingVertical: 20
   },
   input: {
-    height: 50,
     borderColor: '#E9957C',
     borderWidth: 1,
     borderRadius: 10,
@@ -111,14 +97,22 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   buttonContainer: {
-    flexDirection: 'row',
+    flexDirection: 'column',
+    gap: 10,
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 20,
   },
-  signUp: {
-    flexDirection: 'row',
+  signUpContainer: {
+    flex: 1,
+    flexDirection: 'column',
+    gap: 15,
     justifyContent: 'center',
     alignItems: 'center',
+    marginBottom: 20,
+  },
+  icon: {
+    width: 33,
+    height: 33,
   },
 });

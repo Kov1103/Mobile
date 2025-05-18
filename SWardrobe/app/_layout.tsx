@@ -19,6 +19,9 @@ export default function RootLayout() {
     'Poppins-SemiBold': require('../assets/fonts/Poppins-SemiBold.ttf'),
     'Inter-Regular': require('../assets/fonts/Inter_18pt-Regular.ttf'),
     'LeagueSpartan-Regular': require('../assets/fonts/LeagueSpartan-Regular.ttf'),
+    'Poppins-Medium': require('../assets/fonts/Poppins-Medium.ttf'),
+    'Poppins-Regular': require('../assets/fonts/Poppins-Regular.ttf'),
+    'LeagueSpartan-SemiBold': require('../assets/fonts/LeagueSpartan-SemiBold.ttf'),
   });
 
   const [hasSeenOnboarding, setHasSeenOnboarding] = useState<boolean | null>(null);

@@ -1,39 +1,21 @@
 import SwButton from '@/components/shared/SwButton';
 import SwLogo from '@/components/shared/SwLogo';
+import SwNavigator from '@/components/shared/SwNavigator';
 import { Colors } from '@/constants/Colors';
 import { useRouter } from 'expo-router';
 import React from 'react';
 import { View, Text, StyleSheet, SafeAreaView } from 'react-native';
 
-const LaunchScreen = ({ navigation }: any) => {
+const HomeScreen = ({ navigation }: any) => {
   const router = useRouter();
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.logo}>
-        <SwLogo hasTitle={true} />
-      </View>
-      <View style={styles.buttonContainer}>
-        <SwButton
-          label="Log In"
-          onPress={() => router.push("/authen/login")}
-          backgroundColor={Colors.pink}
-          textColor={Colors.white}
-          width={'100%'}
-        />
-        <SwButton
-          label="Sign Up"
-          onPress={() => router.push("/authen/signup")}
-          backgroundColor={Colors.lightYellow}
-          textColor={Colors.pink}
-          width={'100%'}
-        />
-      </View>
-      <Text style={styles.footer}>Sticket Group</Text>
+      <SwNavigator></SwNavigator>
     </SafeAreaView>
   );
 };
 
-export default LaunchScreen;
+export default HomeScreen;
 
 const styles = StyleSheet.create({
   container: {

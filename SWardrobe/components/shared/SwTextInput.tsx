@@ -1,24 +1,44 @@
-import React from 'react';
-import { TextInput, View, Text, StyleSheet, TextInputProps } from 'react-native';
+import React, { useState } from 'react';
+import { View, StyleSheet, TextInputProps, TextInput } from 'react-native';
 import { Colors } from '@/constants/Colors';
+import SubtitleText from './text/SubtitleText';
 
 interface SwTextInputProps extends TextInputProps {
   label?: string;
-  error?: string;
+  type: 'default' | 'password' | 'email';
+  placeholder?: string;
+  style?: object;
+  onChangeText?: (text: string) => void;
 }
 
-const SwTextInput: React.FC<SwTextInputProps> = ({ label, error, style, ...rest }) => {
+const SwTextInput: React.FC<SwTextInputProps> = ({ label, type, style, placeholder = 'Input Text', onChangeText, ...rest }) => {
+  const [isFocused, setIsFocused] = useState(false);
   return (
     <View style={styles.container}>
-      {label && <Text style={styles.label}>{label}</Text>}
+      {label && <SubtitleText style={styles.label}>{label}</SubtitleText>}
 
       <TextInput
-        style={[styles.input, style, error ? styles.inputError : null]}
+        style={[
+          styles.input,
+          style,
+          !isFocused && styles.inputUnfocused,
+          isFocused && styles.inputFocused,
+        ]}
+        autoComplete={type === 'email' ? 'email' : 'off'}
         placeholderTextColor={Colors.lightPink}
+        placeholder={placeholder}
+        secureTextEntry={type === 'password'}
+        onFocus={() => setIsFocused(true)}
+        onBlur={() => setIsFocused(false)}
+        onChangeText={(text) => {
+          if (onChangeText) {
+            onChangeText(text);
+          }
+        }}
+        {...(type === 'email' && { keyboardType: 'email-address' })}
+        {...(type === 'password' && { secureTextEntry: true })}
         {...rest}
       />
-
-      {error && <Text style={styles.errorText}>{error}</Text>}
     </View>
   );
 };
@@ -28,20 +48,28 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   label: {
-    fontSize: 14,
-    color: Colors.black,
+    fontSize: 15,
     marginBottom: 6,
+    paddingLeft: 10,
   },
   input: {
-    borderWidth: 1,
-    borderRadius: 8,
-    paddingHorizontal: 12,
+    borderWidth: 0.5,
+    borderRadius: 18,
+    paddingHorizontal: 20,
     paddingVertical: 10,
     fontSize: 16,
-    color: Colors.black,
-    backgroundColor: Colors.white,
+    fontFamily: 'Poppins-Regular',
+    height: 41
   },
-  inputError: {
+  inputUnfocused: {
+    backgroundColor: Colors.lightYellow,
+    color: Colors.lightPink,
+    borderColor: Colors.lightYellow,
+  },
+  inputFocused: {
+    borderColor: Colors.pink,
+    backgroundColor: Colors.white,
+    color: Colors.darkPink,
   },
   errorText: {
     marginTop: 4,

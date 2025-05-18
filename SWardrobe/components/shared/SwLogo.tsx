@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Image, Text, StyleSheet, ImageStyle } from 'react-native';
+import { View, Image, StyleSheet, ImageStyle } from 'react-native';
 import TitleText from './text/TitleText';
 
 interface SwLogoProps {
@@ -12,7 +12,7 @@ const SwLogo: React.FC<SwLogoProps> = ({ height = 100, hasTitle = true, fontSize
     return (
         <View style={styles.container}>
             <Image
-                source={require('../../assets/logo.png')}
+                source={require('../../assets/icon/logo.png')}
                 style={[styles.logo, { height } as ImageStyle]}
                 resizeMode="contain"
             />

@@ -1,10 +1,14 @@
 import SwButton from '@/components/shared/SwButton';
+import SwTextInput from '@/components/shared/SwTextInput';
+import BoldContentText from '@/components/shared/text/BoldContentText';
 import ContentText from '@/components/shared/text/ContentText';
 import TitleText from '@/components/shared/text/TitleText';
 import TitleHeader from '@/components/shared/TitleHeader';
 import { Colors } from '@/constants/Colors';
+import { router } from 'expo-router';
 import React, { useState } from 'react';
-import { View, TextInput, StyleSheet, KeyboardAvoidingView, Platform, Alert, SafeAreaView } from 'react-native';
+import { View, StyleSheet, KeyboardAvoidingView, Platform, Alert, SafeAreaView, TouchableOpacity } from 'react-native';
+import { Image } from 'react-native';
 
 interface LoginProps {
   navigation: any; // hoặc bạn dùng expo-router thì dùng useRouter
@@ -21,6 +25,7 @@ export default function Login({ navigation }: LoginProps) {
       return;
     }
     Alert.alert('Success', `Logged in as ${email}`);
+    router.push("/home/index");
   };
 
   return (
@@ -36,24 +41,8 @@ export default function Login({ navigation }: LoginProps) {
         </View>
 
         <View style={styles.inputContainer}>
-          <TextInput
-            style={styles.input}
-            placeholder="Email"
-            autoCapitalize="none"
-            keyboardType="email-address"
-            value={email}
-            onChangeText={setEmail}
-            textContentType="emailAddress"
-          />
-
-          <TextInput
-            style={styles.input}
-            placeholder="Password"
-            secureTextEntry
-            value={password}
-            onChangeText={setPassword}
-            textContentType="password"
-          />
+          <SwTextInput label="Email" type="email" placeholder='example@gmail.com' onChangeText={setEmail}></SwTextInput>
+          <SwTextInput label="Password" type="password" placeholder='Enter password' onChangeText={setPassword}></SwTextInput>
         </View>
         <View style={styles.buttonContainer}>
           <SwButton
@@ -61,11 +50,24 @@ export default function Login({ navigation }: LoginProps) {
             onPress={handleLogin}
             backgroundColor={Colors.pink}
             textColor={Colors.darkPink}
-            width={'50%'}
+            width={186}
+            height={41}
           />
+          <TouchableOpacity>
+            <BoldContentText style={{ color: Colors.black }}>Forgot Password?</BoldContentText>
+          </TouchableOpacity>
         </View>
-        <View style={styles.signUp}>
+        <View style={styles.signUpContainer}>
           <ContentText>or sign up with</ContentText>
+          <TouchableOpacity onPress={() => console.log('Facebook pressed')}>
+            <Image source={require('@/assets/icon/google-icon.png')} style={styles.icon} />
+          </TouchableOpacity>
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 5 }}>
+            <ContentText>Don't have an account?</ContentText>
+            <TouchableOpacity onPress={() => router.push('/authen/signup')}>
+              <ContentText style={{ color: Colors.darkPink }}>Sign Up</ContentText>
+            </TouchableOpacity>
+          </View>
         </View>
       </KeyboardAvoidingView>
     </SafeAreaView>
@@ -83,9 +85,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 30
   },
   welcomeContainer: {
-    flex: 1,
-    justifyContent: 'center',
     alignItems: 'flex-start',
+    paddingVertical: 30
   },
   welcomeText: {
     fontSize: 20,
@@ -97,11 +98,10 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   inputContainer: {
-    flex: 1,
     justifyContent: 'center',
+    paddingVertical: 30
   },
   input: {
-    height: 50,
     borderColor: '#E9957C',
     borderWidth: 1,
     borderRadius: 10,
@@ -110,14 +110,22 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   buttonContainer: {
-    flexDirection: 'row',
+    flexDirection: 'column',
+    gap: 10,
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 20,
+    paddingVertical: 10
   },
-  signUp: {
-    flexDirection: 'row',
+  signUpContainer: {
+    flex: 1,
+    flexDirection: 'column',
+    gap: 15,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  icon: {
+    width: 33,
+    height: 33,
   },
 });

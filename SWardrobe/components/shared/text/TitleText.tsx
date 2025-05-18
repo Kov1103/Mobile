@@ -1,3 +1,4 @@
+import { Colors } from '@/constants/Colors';
 import React from 'react';
 import { Text, TextStyle } from 'react-native';
 
@@ -9,7 +10,7 @@ export default function TitleText(props: TitleTextProps) {
     return (
         <Text
             style={[
-                { fontFamily: 'Poppins-SemiBold' },
+                { fontFamily: 'Poppins-SemiBold', color: Colors.pink },
                 props.style,
             ]}
         >

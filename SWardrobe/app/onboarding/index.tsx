@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Image, Dimensions, SafeAreaView } from 'react-native';
+import { View, Text, StyleSheet, Image, Dimensions, SafeAreaView, TouchableOpacity } from 'react-native';
 import AppIntroSlider from 'react-native-app-intro-slider';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useRouter } from 'expo-router';
@@ -19,7 +19,7 @@ const slides = [
     },
     {
         key: '2',
-        title: 'Manage Your Wardrobe',
+        title: 'Manage your Wardrobe',
         text: 'Organize your outfits, track what you own, and keep everything in one place.',
         image: require('../../assets/images/onboarding2.png'),
     },
@@ -62,16 +62,21 @@ export default function OnboardingScreen() {
             <View style={styles.paginationContainer}>
                 <View style={styles.dotsWrapper}>
                     {slides.map((_, i) => (
-                        <View
+                        <TouchableOpacity
                             key={i}
                             style={[
                                 styles.dot,
                                 activeSlide === i ? styles.activeDot : null
                             ]}
+                            onPress={() => {
+                                if (sliderRef.current) {
+                                    sliderRef.current.goToSlide(i);
+                                    setActiveSlide(i);
+                                }
+                            }}
                         />
                     ))}
                 </View>
-
                 <View>
                     {isLastSlide ? (
                         <SwButton
@@ -86,7 +91,6 @@ export default function OnboardingScreen() {
                         <SwButton
                             label="Next"
                             onPress={() => {
-                                console.log('Next button pressed', activeSlide);
                                 if (sliderRef.current) {
                                     sliderRef.current.goToSlide(activeSlide + 1);
                                     setActiveSlide(activeSlide + 1);
@@ -138,15 +142,14 @@ const styles = StyleSheet.create({
     },
     bottomSheet: {
         flex: 0.45,
-        marginHorizontal: 10,
-        paddingHorizontal: 30,
-        paddingTop: 100,
+        paddingHorizontal: 20,
+        paddingTop: 80,
         paddingBottom: 100,
         alignItems: 'center',
         justifyContent: 'center',
     },
     title: {
-        fontSize: 28,
+        fontSize: 24,
         color: Colors.pink,
         textAlign: 'center',
         marginBottom: 15,

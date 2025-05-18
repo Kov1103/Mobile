@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import TitleText from './text/TitleText';
@@ -23,7 +23,7 @@ const TitleHeader: React.FC<TitleHeaderProps> = ({ title, showBackButton = true 
         <View style={styles.placeholder} />
       )}
       <TitleText style={styles.title}>{title}</TitleText>
-      <View style={styles.placeholder} /> {/* For spacing symmetry */}
+      <View style={styles.placeholder} />
     </View>
   );
 };

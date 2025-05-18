@@ -2,15 +2,15 @@ import { Colors } from '@/constants/Colors';
 import React from 'react';
 import { Text, TextStyle } from 'react-native';
 
-type SubtitleTextProps = React.PropsWithChildren<{
+type BoldContentTextProps = React.PropsWithChildren<{
     style?: TextStyle | TextStyle[];
 }>;
 
-export default function SubtitleText(props: SubtitleTextProps) {
+export default function BoldContentText(props: BoldContentTextProps) {
     return (
         <Text
             style={[
-                { fontFamily: 'Poppins-Medium', color: Colors.black },
+                { fontFamily: 'LeagueSpartan-SemiBold', color: Colors.black },
                 props.style,
             ]}
         >
