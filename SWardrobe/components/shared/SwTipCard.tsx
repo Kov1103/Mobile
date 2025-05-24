@@ -3,6 +3,8 @@ import { AntDesign } from '@expo/vector-icons';
 import React from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import ContentText from './text/ContentText';
+import TitleText from './text/TitleText';
+import SubtitleText from './text/SubtitleText';
 
 interface TipsCardProps {
   title: string;
@@ -15,13 +17,13 @@ const SwTipCard: React.FC<TipsCardProps> = ({ title, subtitle, rating, image }) 
   return (
     <View style={styles.card}>
       <View style={styles.textContainer}>
-        <Text style={styles.title}>{title}</Text>
-        <Text style={styles.subtitle}>{subtitle}</Text>
+        <TitleText style={styles.title}>{title}</TitleText>
+        <SubtitleText style={styles.subtitle}>{subtitle}</SubtitleText>
 
         <View style={styles.footer}>
           <View style={styles.ratingContainer}>
             <AntDesign name="star" size={12} color={Colors.pink} />
-            <ContentText style={{paddingTop: 3}}>{rating.toFixed(1)}</ContentText>
+            <ContentText>{rating.toFixed(1)}</ContentText>
           </View>
 
           <TouchableOpacity style={styles.readNowButton}>
@@ -52,7 +54,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#333',
+    color: Colors.black,
   },
   subtitle: {
     fontSize: 14,
@@ -81,7 +83,7 @@ const styles = StyleSheet.create({
     marginRight: 4,
   },
   readNowButton: {
-    backgroundColor: '#fff',
+    backgroundColor: Colors.white,
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 16,

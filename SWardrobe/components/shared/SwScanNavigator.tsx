@@ -30,7 +30,7 @@ const tabs = [
     icon: require('../../assets/icon/Nav_Scan.png'),
     isScan: true,
     path: '/scan',
-    iconActive: null
+    iconActive: require('../../assets/icon/Nav_Scan.png'),
   },
   {
     name: 'hanger',
@@ -70,7 +70,7 @@ const SwNavigator: React.FC<SwNavigatorProps> = ({ height = 73 }) => {
           >
             <Image
               source={isActive ? tab.iconActive : tab.icon}
-              style={styles.icon}
+              style={tab.isScan ? styles.scanIcon : styles.icon}
               resizeMode="contain"
             />
           </TouchableOpacity>
@@ -99,17 +99,22 @@ const styles = StyleSheet.create({
     },
     scanWrapper: {
         marginHorizontal: 16,
-        width: 58,
-        height: 58,
-        borderRadius: 32,
-        backgroundColor: Colors.pink, // chỉnh theo màu bạn muốn
+        width: 80,
+        height: 80,
+        borderRadius: 40,
+        backgroundColor: Colors.darkPink, // chỉnh theo màu bạn muốn
         alignItems: 'center',
         justifyContent: 'center',
+        bottom: 24,
     },
     icon: {
         width: 40,
         height: 40,
     },
+    scanIcon: {
+        width: 56,
+        height: 56,
+    }
 });
 
 export default SwNavigator;
