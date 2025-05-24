@@ -1,18 +1,22 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
-const ItemCard = ({ children }: { children: React.ReactNode }) => {
+import { View, StyleSheet, Image, Text } from 'react-native';
+
+interface ItemImageProps {
+    image: any; // require(...) hoặc uri
+    height?: number;
+    width?: number;
+}
+
+const ItemCard:React.FC<ItemImageProps> = ({image})  => {
   return (
     <View style={styles.card}>
-      <img
-        src=""
-        alt="Item"
-        style={styles.image}
-        />
-        <p style={styles.name}>Grey t-shirt</p>
+      <Image source={image} style={styles.image} />
+      <Text style={styles.name}>Grey t-shirt</Text>
     </View>
   );
 }
 export default ItemCard;
+
 const styles = StyleSheet.create({
   card: {
     display: 'flex',
@@ -41,8 +45,8 @@ const styles = StyleSheet.create({
     marginTop: 15,
   },
   image: {
-    width: 97,
-    height: 81  
+    width: 60,
+    height: 70,
   }
 });
 

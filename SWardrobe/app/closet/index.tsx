@@ -6,13 +6,29 @@ import { useRouter } from 'expo-router';
 import React from 'react';
 import { View, Text, StyleSheet, SafeAreaView } from 'react-native';
 import Palette from '@/components/closet/Palette';
+import SwSelector from '@/components/shared/SwSelector';
+import ItemImage from '@/components/closet/ItemImage';
+import ItemCard from '@/components/closet/ItemCard';
+// Define the Option type according to SwSelector's expected prop type
+type Option = { label: string; value: string };
+
+const options: Option[] = [
+  { label: 'Java', value: 'java' },
+  { label: 'JavaScript', value: 'js' },
+  { label: 'Python', value: 'python' },
+  { label: 'Ruby', value: 'ruby' },
+  { label: 'C++', value: 'cpp' },
+]; 
+
 
 const HomeScreen = ({ navigation }: any) => {
   const router = useRouter();
   return (
     <SafeAreaView style={styles.container}>
-      <SwNavigator></SwNavigator>
-      <Palette></Palette>
+      <SwNavigator />
+      {/* <SwSelector options={options} /> */}
+      <ItemCard image={require('@/assets/images/item1.png')}/>
+      {/* <ItemImage image={require('@/assets/images/item1.png')} /> */}
     </SafeAreaView>
   );
 };
