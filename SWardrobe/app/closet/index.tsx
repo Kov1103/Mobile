@@ -5,12 +5,14 @@ import { Colors } from '@/constants/Colors';
 import { useRouter } from 'expo-router';
 import React from 'react';
 import { View, Text, StyleSheet, SafeAreaView } from 'react-native';
+import Palette from '@/components/closet/Palette';
 
 const HomeScreen = ({ navigation }: any) => {
   const router = useRouter();
   return (
     <SafeAreaView style={styles.container}>
       <SwNavigator></SwNavigator>
+      <Palette></Palette>
     </SafeAreaView>
   );
 };
