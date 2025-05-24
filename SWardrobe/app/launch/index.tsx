@@ -19,6 +19,7 @@ const LaunchScreen = ({ navigation }: any) => {
           backgroundColor={Colors.pink}
           textColor={Colors.white}
           width={'100%'}
+          height={45}
         />
         <SwButton
           label="Sign Up"
@@ -26,6 +27,7 @@ const LaunchScreen = ({ navigation }: any) => {
           backgroundColor={Colors.lightYellow}
           textColor={Colors.pink}
           width={'100%'}
+          height={45}
         />
       </View>
       <Text style={styles.footer}>Sticket Group</Text>
@@ -60,7 +62,6 @@ const styles = StyleSheet.create({
     fontFamily: 'Inter-Regular',
     letterSpacing: 8,
     paddingTop: 20,
-    marginBottom: 10, 
   },
 });
 

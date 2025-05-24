@@ -52,7 +52,6 @@ const SwButton: React.FC<SwButtonProps> = ({
 
 const styles = StyleSheet.create({
   button: {
-    paddingVertical: 12,
     paddingHorizontal: 24,
     borderRadius: 30,
     alignItems: 'center',

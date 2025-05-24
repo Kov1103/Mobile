@@ -7,8 +7,9 @@ import TitleHeader from '@/components/shared/TitleHeader';
 import { Colors } from '@/constants/Colors';
 import { router } from 'expo-router';
 import React, { useState } from 'react';
-import { View, StyleSheet, KeyboardAvoidingView, Platform, Alert, SafeAreaView, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, KeyboardAvoidingView, Platform, Alert, TouchableOpacity } from 'react-native';
 import { Image } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 interface LoginProps {
   navigation: any; // hoặc bạn dùng expo-router thì dùng useRouter
@@ -25,7 +26,7 @@ export default function Login({ navigation }: LoginProps) {
       return;
     }
     Alert.alert('Success', `Logged in as ${email}`);
-    router.push("/home/index");
+    router.push("/home");
   };
 
   return (
@@ -58,10 +59,6 @@ export default function Login({ navigation }: LoginProps) {
           </TouchableOpacity>
         </View>
         <View style={styles.signUpContainer}>
-          <ContentText>or sign up with</ContentText>
-          <TouchableOpacity onPress={() => console.log('Facebook pressed')}>
-            <Image source={require('@/assets/icon/google-icon.png')} style={styles.icon} />
-          </TouchableOpacity>
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: 5 }}>
             <ContentText>Don't have an account?</ContentText>
             <TouchableOpacity onPress={() => router.push('/authen/signup')}>

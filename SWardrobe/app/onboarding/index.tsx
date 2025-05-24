@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Image, Dimensions, SafeAreaView, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, Image, Dimensions, TouchableOpacity } from 'react-native';
 import AppIntroSlider from 'react-native-app-intro-slider';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useRouter } from 'expo-router';
@@ -7,6 +7,7 @@ import TitleText from '@/components/shared/text/TitleText';
 import ContentText from '@/components/shared/text/ContentText';
 import SwButton from '@/components/shared/SwButton';
 import { useRef, useState } from 'react';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const { width, height } = Dimensions.get('window');
 
@@ -118,7 +119,8 @@ export default function OnboardingScreen() {
                 showSkipButton={true}
                 onSkip={handleDone}
                 renderPagination={renderPagination}
-                ref={(ref) => (sliderRef.current = ref)}
+                ref={sliderRef}
+                onSlideChange={(index) => setActiveSlide(index)}
             />
         </SafeAreaView>
     );
