@@ -1,44 +1,102 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, TextInputProps, TextInput } from 'react-native';
+import { View, StyleSheet, TextInputProps, TextInput, Text } from 'react-native';
 import { Colors } from '@/constants/Colors';
 import SubtitleText from './text/SubtitleText';
 
 interface SwTextInputProps extends TextInputProps {
   label?: string;
-  type: 'default' | 'password' | 'email';
+  type: 'default' | 'password' | 'email' | 'number' | 'phone';
   placeholder?: string;
   style?: object;
+  value?: string;
   onChangeText?: (text: string) => void;
+  showValidationError?: boolean;
 }
 
-const SwTextInput: React.FC<SwTextInputProps> = ({ label, type, style, placeholder = 'Input Text', onChangeText, ...rest }) => {
+const SwTextInput: React.FC<SwTextInputProps> = ({
+  label,
+  type,
+  style,
+  placeholder = 'Input Text',
+  onChangeText,
+  showValidationError = true,
+  ...rest
+}) => {
   const [isFocused, setIsFocused] = useState(false);
+  const [value, setValue] = useState('');
+  const [error, setError] = useState('');
+
+  const formatPhoneNumber = (input: string) => {
+    const digits = input.replace(/\D/g, '').slice(0, 10); // chỉ lấy 10 số
+    const parts = [];
+
+    if (digits.length > 0) parts.push(digits.slice(0, 4));
+    if (digits.length > 4) parts.push(digits.slice(4, 7));
+    if (digits.length > 7) parts.push(digits.slice(7, 10));
+
+    return parts.join(' ');
+  };
+
+  const validate = (text: string) => {
+    if (type === 'email') {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      setError(emailRegex.test(text) ? '' : 'Invalid email format');
+    } else if (type === 'number') {
+      const numberRegex = /^\d+$/;
+      setError(numberRegex.test(text) ? '' : 'Only numbers are allowed');
+    } else if (type === 'phone') {
+      const digits = text.replace(/\D/g, '');
+      setError(digits.length === 10 ? '' : 'Phone number must be 10 digits');
+    } else {
+      setError('');
+    }
+  };
+
+  const handleTextChange = (text: string) => {
+    let processedText = text;
+
+    if (type === 'phone') {
+      processedText = formatPhoneNumber(text);
+    }
+
+    setValue(processedText);
+    validate(processedText);
+
+    if (onChangeText) {
+      onChangeText(processedText);
+    }
+  };
+
   return (
     <View style={styles.container}>
       {label && <SubtitleText style={styles.label}>{label}</SubtitleText>}
-
       <TextInput
         style={[
           styles.input,
           style,
           !isFocused && styles.inputUnfocused,
           isFocused && styles.inputFocused,
+          !!error && styles.inputError,
         ]}
         autoComplete={type === 'email' ? 'email' : 'off'}
         placeholderTextColor={Colors.lightPink}
         placeholder={placeholder}
         secureTextEntry={type === 'password'}
+        keyboardType={
+          type === 'email' ? 'email-address' :
+          type === 'number' || type === 'phone' ? 'numeric' :
+          'default'
+        }
         onFocus={() => setIsFocused(true)}
-        onBlur={() => setIsFocused(false)}
-        onChangeText={(text) => {
-          if (onChangeText) {
-            onChangeText(text);
-          }
+        onBlur={() => {
+          setIsFocused(false);
+          validate(value);
         }}
-        {...(type === 'email' && { keyboardType: 'email-address' })}
-        {...(type === 'password' && { secureTextEntry: true })}
+        onChangeText={handleTextChange}
+        value={value}
         {...rest}
       />
+      {error && showValidationError && <Text style={[styles.errorText, { color: 'red' }]}>{error}</Text>}
     </View>
   );
 };
@@ -56,10 +114,10 @@ const styles = StyleSheet.create({
     borderWidth: 0.5,
     borderRadius: 18,
     paddingHorizontal: 20,
-    paddingVertical: 10,
     fontSize: 16,
+    textAlignVertical: 'center',
     fontFamily: 'Poppins-Regular',
-    height: 41
+    height: 41,
   },
   inputUnfocused: {
     backgroundColor: Colors.lightYellow,
@@ -71,9 +129,13 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
     color: Colors.darkPink,
   },
+  inputError: {
+    borderColor: 'red',
+  },
   errorText: {
     marginTop: 4,
     fontSize: 12,
+    paddingLeft: 10,
   },
 });
 

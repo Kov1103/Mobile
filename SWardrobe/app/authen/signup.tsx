@@ -1,4 +1,5 @@
 import SwButton from '@/components/shared/SwButton';
+import SwDatePicker from '@/components/shared/SwDatePicker';
 import SwTextInput from '@/components/shared/SwTextInput';
 import BoldContentText from '@/components/shared/text/BoldContentText';
 import ContentText from '@/components/shared/text/ContentText';
@@ -7,16 +8,21 @@ import TitleHeader from '@/components/shared/TitleHeader';
 import { Colors } from '@/constants/Colors';
 import { router } from 'expo-router';
 import React, { useState } from 'react';
-import { View, StyleSheet, KeyboardAvoidingView, Platform, Alert, SafeAreaView, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, KeyboardAvoidingView, Platform, Alert, TouchableOpacity } from 'react-native';
 import { Image } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 interface SignUpProps {
   navigation: any; // hoặc bạn dùng expo-router thì dùng useRouter
 }
 
 export default function SignUp({ navigation }: SignUpProps) {
+  const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [mobileNumber, setMobileNumber] = useState('');
+  const [date, setDate] = useState(new Date());
 
   const handleSignUP = () => {
     // Thêm logic xác thực ở đây
@@ -35,12 +41,19 @@ export default function SignUp({ navigation }: SignUpProps) {
         behavior={Platform.select({ ios: 'padding', android: undefined })}
       >
         <View style={styles.inputContainer}>
-          <SwTextInput label="Full Name" type="default"></SwTextInput>
-          <SwTextInput label="Email" type="email" placeholder='Input Your Email'></SwTextInput>
-          <SwTextInput label="Mobile Number" type="default" placeholder='0123 456 789'></SwTextInput>
-          <SwTextInput label="Date of Birth" type="default" placeholder='DD/MM/YYYY'></SwTextInput>
-          <SwTextInput label="Password" type="password" placeholder='Enter password'></SwTextInput>
-          <SwTextInput label="Confirm Password" type="password" placeholder='Enter confirm password'></SwTextInput>
+          <SwTextInput label="Full Name" type="default" placeholder='Input Your Full Name' value={fullName} onChangeText={setFullName}></SwTextInput>
+          <SwTextInput label="Email" type="email" placeholder='Input Your Email' value={email} onChangeText={setEmail}></SwTextInput>
+          <SwTextInput label="Mobile Number" type="phone" placeholder='0123 456 789' value={mobileNumber} onChangeText={setMobileNumber}></SwTextInput>
+          {/* <SwTextInput label="Date of Birth" type="default" placeholder='DD/MM/YYYY'></SwTextInput> */}
+          <SwDatePicker
+            label="Date of Birth"
+            value={date}
+            onChange={setDate}
+            minimumDate={new Date(1900, 0, 1)}
+            maximumDate={new Date()}
+          />
+          <SwTextInput label="Password" type="password" placeholder='Enter password' value={password} onChangeText={setPassword}></SwTextInput>
+          <SwTextInput label="Confirm Password" type="password" placeholder='Enter confirm password' value={confirmPassword} onChangeText={setConfirmPassword}></SwTextInput>
         </View>
         <View style={styles.buttonContainer}>
           <ContentText style={{ textAlign: 'center', width: 195 }}>
@@ -58,10 +71,6 @@ export default function SignUp({ navigation }: SignUpProps) {
           />
         </View>
         <View style={styles.signUpContainer}>
-          <ContentText>or sign up with</ContentText>
-          <TouchableOpacity onPress={() => console.log('Facebook pressed')}>
-            <Image source={require('@/assets/icon/google-icon.png')} style={styles.icon} />
-          </TouchableOpacity>
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: 5 }}>
             <ContentText>Already have an account?</ContentText>
             <TouchableOpacity onPress={() => router.push('/authen/login')}>
