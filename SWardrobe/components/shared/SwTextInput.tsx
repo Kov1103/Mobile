@@ -115,9 +115,8 @@ const styles = StyleSheet.create({
     borderRadius: 18,
     paddingHorizontal: 20,
     fontSize: 16,
-    textAlignVertical: 'center',
     fontFamily: 'Poppins-Regular',
-    height: 41,
+    paddingVertical: 10,
   },
   inputUnfocused: {
     backgroundColor: Colors.lightYellow,

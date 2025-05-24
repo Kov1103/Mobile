@@ -8,7 +8,6 @@ import { Colors } from '@/constants/Colors';
 import { router } from 'expo-router';
 import React, { useState } from 'react';
 import { View, StyleSheet, KeyboardAvoidingView, Platform, Alert, TouchableOpacity } from 'react-native';
-import { Image } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 interface LoginProps {
@@ -26,7 +25,7 @@ export default function Login({ navigation }: LoginProps) {
       return;
     }
     Alert.alert('Success', `Logged in as ${email}`);
-    router.push("/home");
+    router.push("/navigate/home");
   };
 
   return (

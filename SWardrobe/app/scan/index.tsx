@@ -1,48 +1,25 @@
-import SwButton from '@/components/shared/SwButton';
-import SwLogo from '@/components/shared/SwLogo';
-import SwNavigator from '@/components/shared/SwNavigator';
+import SwScanNavigator from '@/components/shared/SwScanNavigator';
+import TitleHeader from '@/components/shared/TitleHeader';
 import { Colors } from '@/constants/Colors';
-import { useRouter } from 'expo-router';
 import React from 'react';
-import { View, Text, StyleSheet, SafeAreaView } from 'react-native';
+import { StyleSheet } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
-const HomeScreen = ({ navigation }: any) => {
-  const router = useRouter();
+const ScanScreen  = ({ navigation }: any) => {
   return (
     <SafeAreaView style={styles.container}>
-      <SwNavigator></SwNavigator>
+      <TitleHeader title="Scan Your Clothes"></TitleHeader>
+      <SwScanNavigator></SwScanNavigator>
     </SafeAreaView>
   );
 };
 
-export default HomeScreen;
+export default ScanScreen;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.white,
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingVertical: 40,
-  },
-  logo: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'flex-end',
-  },
-  buttonContainer: {
-    width: '50%',
-    alignItems: 'center',
-    gap: 12,
-    marginBottom: 50,
-  },
-  footer: {
-    color: '#EFAF9B',
-    fontSize: 20,
-    fontFamily: 'Inter-Regular',
-    letterSpacing: 8,
-    paddingTop: 20,
-    marginBottom: 10, 
   },
 });
 
