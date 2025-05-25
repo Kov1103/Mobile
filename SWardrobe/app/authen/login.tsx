@@ -7,7 +7,7 @@ import TitleHeader from '@/components/shared/TitleHeader';
 import { Colors } from '@/constants/Colors';
 import { router } from 'expo-router';
 import React, { useState } from 'react';
-import { View, StyleSheet, KeyboardAvoidingView, Platform, Alert, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, KeyboardAvoidingView, Platform, Alert, TouchableOpacity, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 interface LoginProps {
@@ -31,41 +31,42 @@ export default function Login({ navigation }: LoginProps) {
   return (
     <SafeAreaView style={styles.container}>
       <TitleHeader title="Log In"></TitleHeader>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <KeyboardAvoidingView style={styles.containerArea}
+          behavior={Platform.select({ ios: 'padding', android: undefined })}
+        >
+          <View style={styles.welcomeContainer}>
+            <TitleText style={styles.welcomeText}>Welcome</TitleText>
+            <ContentText style={styles.welcomeContentText}>Please enter your details to proceed.</ContentText>
+          </View>
 
-      <KeyboardAvoidingView style={styles.containerArea}
-        behavior={Platform.select({ ios: 'padding', android: undefined })}
-      >
-        <View style={styles.welcomeContainer}>
-          <TitleText style={styles.welcomeText}>Welcome</TitleText>
-          <ContentText style={styles.welcomeContentText}>Please enter your details to proceed.</ContentText>
-        </View>
-
-        <View style={styles.inputContainer}>
-          <SwTextInput label="Email" type="email" placeholder='example@gmail.com' onChangeText={setEmail}></SwTextInput>
-          <SwTextInput label="Password" type="password" placeholder='Enter password' onChangeText={setPassword}></SwTextInput>
-        </View>
-        <View style={styles.buttonContainer}>
-          <SwButton
-            label="Log In"
-            onPress={handleLogin}
-            backgroundColor={Colors.pink}
-            textColor={Colors.darkPink}
-            width={186}
-            height={41}
-          />
-          <TouchableOpacity>
-            <BoldContentText style={{ color: Colors.black }}>Forgot Password?</BoldContentText>
-          </TouchableOpacity>
-        </View>
-        <View style={styles.signUpContainer}>
-          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 5 }}>
-            <ContentText>Don't have an account?</ContentText>
-            <TouchableOpacity onPress={() => router.push('/authen/signup')}>
-              <ContentText style={{ color: Colors.darkPink }}>Sign Up</ContentText>
+          <View style={styles.inputContainer}>
+            <SwTextInput label="Email" type="email" placeholder='example@gmail.com' onChangeText={setEmail}></SwTextInput>
+            <SwTextInput label="Password" type="password" placeholder='Enter password' onChangeText={setPassword}></SwTextInput>
+          </View>
+          <View style={styles.buttonContainer}>
+            <SwButton
+              label="Log In"
+              onPress={handleLogin}
+              backgroundColor={Colors.pink}
+              textColor={Colors.darkPink}
+              width={186}
+              height={41}
+            />
+            <TouchableOpacity>
+              <BoldContentText style={{ color: Colors.black }}>Forgot Password?</BoldContentText>
             </TouchableOpacity>
           </View>
-        </View>
-      </KeyboardAvoidingView>
+          <View style={styles.signUpContainer}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 5 }}>
+              <ContentText>Don't have an account?</ContentText>
+              <TouchableOpacity onPress={() => router.push('/authen/signup')}>
+                <ContentText style={{ color: Colors.darkPink }}>Sign Up</ContentText>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </KeyboardAvoidingView>
+      </TouchableWithoutFeedback>
     </SafeAreaView>
   );
 }
