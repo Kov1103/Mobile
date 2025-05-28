@@ -1,18 +1,29 @@
+import { Link } from 'expo-router';
 import React from 'react';
 import { View, StyleSheet, Image, Text } from 'react-native';
+import { Item } from '@/constants/Item';
 
-interface ItemImageProps {
-    image: any; // require(...) hoặc uri
-    height?: number;
-    width?: number;
-}
 
-const ItemCard:React.FC<ItemImageProps> = ({image})  => {
+type ItemCardProps = {
+  item: Item;
+};
+
+const ItemCard: React.FC<ItemCardProps> = ({ item }) => {
   return (
-    <View style={styles.card}>
-      <Image source={image} style={styles.image} />
-      <Text style={styles.name}>Grey t-shirt</Text>
-    </View>
+    <Link href={{
+      pathname: '/closet/detail',
+      params: {
+        image: item.image[0],
+        name: item.name,
+        category: item.category,
+        color: item.color,
+      }
+    }}>
+      <View style={styles.card}>
+        <Image source={{ uri: item.image[0] }} style={styles.image} />
+        <Text style={styles.name}>{item.name}</Text>
+      </View>
+    </Link>
   );
 }
 export default ItemCard;
@@ -25,9 +36,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#fff',
     borderRadius: 10,
-    padding: 10,
     marginVertical: 10,
-    marginHorizontal: 20,
+    marginHorizontal: 15,
     shadowColor: '#000',
     shadowOffset: {
       width: 5, // shift right
@@ -36,8 +46,8 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 4, // Android shadow (only bottom and right)
-    height: 136,
-    width: 128,
+    height: 140,
+    width: 150,
   },
   name: {
     fontFamily: 'League Spartan',

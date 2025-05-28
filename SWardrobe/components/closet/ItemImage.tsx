@@ -16,20 +16,22 @@ const ItemImage: React.FC<ItemImageProps> = ({image}) => {
         </View>
     );
 }
+import { Dimensions } from 'react-native';
+
 const styles = StyleSheet.create({
     background: {
         backgroundColor: Colors.lightYellow,
-        borderRadius: 10,
-        height: '40%',
-        width: '80%',
+        borderRadius: '2%',
+        height: Dimensions.get('window').height*0.35,
+        width: Dimensions.get('window').width*0.8,
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
     },
     image: {
-        width: '65%',
-        height: '65%',
+        width: '70%',
+        height: '70%',
         borderRadius: 10,
         marginVertical: 10,
         marginHorizontal: 20,
