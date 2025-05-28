@@ -32,11 +32,38 @@ export default function ScanScreen() {
     );
   }
 
-
   async function takePicture() {
     if (cameraRef.current) {
       const result = await cameraRef.current.takePictureAsync();
-      dispatch({ type: 'TOGGLE_SCANNING', payload: false });
+      console.log(result);
+      dispatch({ type: "TOGGLE_SCANNING", payload: false });
+
+      const uri = result.uri;
+      const fileName = uri.split("/").pop();
+      const fileType = "image/jpeg";
+
+      const formData = new FormData();
+      formData.append("file", {
+        uri,
+        name: fileName,
+        type: fileType,
+      } as any);
+
+      console.log(fileType);
+      try {
+        const res = await fetch("http://localhost:3000/items/detect", {
+          method: "POST",
+          body: formData,
+          headers: {
+            // "Content-Type": "multipart/form-data",
+          },
+        });
+
+        const json = await res.json();
+        console.log("✅ Upload success:", json);
+      } catch (err) {
+        console.error("❌ Upload failed:", err);
+      }
     }
   }
 
@@ -44,7 +71,7 @@ export default function ScanScreen() {
     <View style={styles.container}>
       <TitleHeader title="Scan Your Clothes" />
       <CameraView style={styles.camera} ref={cameraRef}>
-        <Image source={require('../../assets/images/carrier.png')}></Image>
+        <Image source={require("../../assets/images/carrier.png")}></Image>
       </CameraView>
     </View>
   );
