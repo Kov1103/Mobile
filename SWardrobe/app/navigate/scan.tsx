@@ -35,7 +35,7 @@ export default function ScanScreen() {
   async function takePicture() {
     if (cameraRef.current) {
       const result = await cameraRef.current.takePictureAsync();
-      console.log('pictrue', result);
+      console.log("pictrue", result);
       dispatch({ type: "TOGGLE_SCANNING", payload: false });
 
       const uri = result.uri;
@@ -50,9 +50,8 @@ export default function ScanScreen() {
 
       console.log([...formData]);
 
-
       try {
-        const res = await fetch("http://localhost:3000/items/detect", {
+        const res = await fetch("http://192.168.1.5:3000/items/detect", {
           method: "POST",
           body: formData,
         });
