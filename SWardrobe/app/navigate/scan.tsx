@@ -35,28 +35,26 @@ export default function ScanScreen() {
   async function takePicture() {
     if (cameraRef.current) {
       const result = await cameraRef.current.takePictureAsync();
-      console.log(result);
+      console.log('pictrue', result);
       dispatch({ type: "TOGGLE_SCANNING", payload: false });
 
       const uri = result.uri;
-      const fileName = uri.split("/").pop();
-      const fileType = "image/jpeg";
+      const fileName = uri.split("/").pop() || "photo.jpg";
+
+      // 👇 Tạo blob từ URI
+      const response = await fetch(uri);
+      const blob = await response.blob();
 
       const formData = new FormData();
-      formData.append("file", {
-        uri,
-        name: fileName,
-        type: fileType,
-      } as any);
+      formData.append("file", blob, fileName); // ✅ Thêm blob kèm tên file
 
-      console.log(fileType);
+      console.log([...formData]);
+
+
       try {
         const res = await fetch("http://localhost:3000/items/detect", {
           method: "POST",
           body: formData,
-          headers: {
-            // "Content-Type": "multipart/form-data",
-          },
         });
 
         const json = await res.json();
