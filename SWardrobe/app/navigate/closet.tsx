@@ -28,12 +28,13 @@ const ClosetScreen = ({ navigation }: any) => {
         //         </View>
         //     </View>
         // </SafeAreaView>
-        <View>
+       <View style={{ flex: 1 }}>
             <TitleHeader title="Your Closet" showBackButton={false} />
-                <View style={styles.containerArea}>
-                    <HomeScreen navigation={navigation} />
-                </View>
+            <View style={styles.containerArea}>
+                <HomeScreen navigation={navigation} />
+            </View>
         </View>
+
     );
 };
 

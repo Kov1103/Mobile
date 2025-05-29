@@ -88,7 +88,7 @@ export default function SignUp({ navigation }: SignUpProps) {
           behavior={Platform.select({ ios: 'padding', android: undefined })}
         >
           <View style={styles.inputContainer}>
-            <SwTextInput label="Full Name" type="default" placeholder='Input Your Full Name' value={fullName} onChangeText={setFullName}></SwTextInput>
+            <SwTextInput label="Full Name" type="default" placeholder='Input Your Full Name' value={full_name} onChangeText={setFull_name}></SwTextInput>
             <SwTextInput label="Email" type="email" placeholder='Input Your Email' value={email} onChangeText={setEmail}></SwTextInput>
             <SwTextInput label="Mobile Number" type="phone" placeholder='0123 456 789' value={mobileNumber} onChangeText={setMobileNumber}></SwTextInput>
             {/* <SwTextInput label="Date of Birth" type="default" placeholder='DD/MM/YYYY'></SwTextInput> */}
