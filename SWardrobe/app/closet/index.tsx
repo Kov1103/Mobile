@@ -74,7 +74,7 @@ const HomeScreen = ({ navigation }: any) => {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: Colors.white}}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: Colors.white, marginBottom: 40, paddingHorizontal: 0 }}>
         {/* <TitleHeader title="Your Closet" showBackButton={false} /> */}
         <ScrollView style={styles.container}>
         { categories.map((category, index) => (

@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
   grid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    justifyContent: 'space-between',
+    // justifyContent: 'space-between',
   },
   itemWrapper: {
     width: '48%', // Almost half, accounting for spacing
