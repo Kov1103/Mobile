@@ -8,7 +8,6 @@ import { View, Image, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 const HomeScreen = ({ navigation }: any) => {
-    const router = useRouter();
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.containerArea}>
@@ -38,6 +37,7 @@ export default HomeScreen;
 const styles = StyleSheet.create({
     container: {
         backgroundColor: Colors.white,
+        flex: 1,
     },
     containerArea: {
         flex: 1,

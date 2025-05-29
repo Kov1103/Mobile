@@ -8,7 +8,7 @@ import TitleHeader from '@/components/shared/TitleHeader';
 import { Colors } from '@/constants/Colors';
 import { router } from 'expo-router';
 import React, { useState } from 'react';
-import { View, StyleSheet, KeyboardAvoidingView, Platform, Alert, TouchableOpacity, ScrollView } from 'react-native';
+import { View, StyleSheet, KeyboardAvoidingView, Platform, Alert, TouchableOpacity, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import { Image } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -83,13 +83,12 @@ export default function SignUp({ navigation }: SignUpProps) {
   return (
     <SafeAreaView style={styles.container}>
       <TitleHeader title="Create Account"></TitleHeader>
-
-      <ScrollView>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <KeyboardAvoidingView style={styles.containerArea}
-        behavior={Platform.select({ ios: 'padding', android: undefined })}
-      >
+          behavior={Platform.select({ ios: 'padding', android: undefined })}
+        >
           <View style={styles.inputContainer}>
-            <SwTextInput label="Full Name" type="default" placeholder='Input Your Full Name' value={full_name} onChangeText={setFull_name}></SwTextInput>
+            <SwTextInput label="Full Name" type="default" placeholder='Input Your Full Name' value={fullName} onChangeText={setFullName}></SwTextInput>
             <SwTextInput label="Email" type="email" placeholder='Input Your Email' value={email} onChangeText={setEmail}></SwTextInput>
             <SwTextInput label="Mobile Number" type="phone" placeholder='0123 456 789' value={mobileNumber} onChangeText={setMobileNumber}></SwTextInput>
             {/* <SwTextInput label="Date of Birth" type="default" placeholder='DD/MM/YYYY'></SwTextInput> */}
@@ -127,8 +126,7 @@ export default function SignUp({ navigation }: SignUpProps) {
             </View>
           </View>
         </KeyboardAvoidingView>
-
-      </ScrollView>
+      </TouchableWithoutFeedback>
     </SafeAreaView>
   );
 }
