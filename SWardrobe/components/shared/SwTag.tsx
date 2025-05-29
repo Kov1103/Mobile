@@ -8,7 +8,7 @@ const SwTag = ({text,style}: {
     text: string;
     style?: object;
 }) => {
-    const [isSelected, setIsSelected] = useState(false);
+    const [isSelected, setIsSelected] = useState(true);
     return (
         <View style={[styles.tag, isSelected ? styles.tagSelected : {}, style]}>
             <Text style={{ fontFamily: 'League Spartan', fontSize: 14, color: '#000' }}>
@@ -27,7 +27,8 @@ const styles = StyleSheet.create({
         paddingHorizontal: 12,
         paddingVertical: 6,
         marginRight: 8,
-    },
+        alignSelf: 'flex-start', // 👈 quan trọng để fit content
+        },
     tagText: {
         fontFamily: 'League Spartan',
         fontSize: 14,

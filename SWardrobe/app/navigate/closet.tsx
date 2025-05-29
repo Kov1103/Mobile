@@ -7,7 +7,7 @@ import React from 'react';
 import { View, Image, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import HomeScreen from '@/app/closet/index'; // Adjust the import path as necessary
-
+import TitleHeader from '@/components/shared/TitleHeader';
 const ClosetScreen = ({ navigation }: any) => {
     const router = useRouter();
     return (
@@ -28,11 +28,12 @@ const ClosetScreen = ({ navigation }: any) => {
         //         </View>
         //     </View>
         // </SafeAreaView>
-        <SafeAreaView style={styles.container}>
-            <View style={styles.containerArea}>
-                <HomeScreen navigation={navigation} />
-            </View>
-        </SafeAreaView>
+        <View>
+            <TitleHeader title="Your Closet" showBackButton={false} />
+                <View style={styles.containerArea}>
+                    <HomeScreen navigation={navigation} />
+                </View>
+        </View>
     );
 };
 
@@ -42,7 +43,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: Colors.white,
-        justifyContent: 'space-between',
+        // justifyContent: 'space-between',
         alignItems: 'center',
     },
     containerArea: {

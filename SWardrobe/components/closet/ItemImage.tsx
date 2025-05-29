@@ -12,7 +12,7 @@ interface ItemImageProps {
 const ItemImage: React.FC<ItemImageProps> = ({image}) => {
     return (
         <View style={styles.background}>
-            <Image source={image} style={styles.image} />
+            <Image source={{uri: image}} style={styles.image} />
         </View>
     );
 }

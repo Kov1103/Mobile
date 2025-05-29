@@ -47,7 +47,6 @@ export default function Login({ navigation }: LoginProps) {
         throw new Error('Login failed');
       }
       const data = response.data;
-      console.log('Login response data:', data);
       // Lưu token vào AsyncStorage
       if (data) {
         // // Save the token

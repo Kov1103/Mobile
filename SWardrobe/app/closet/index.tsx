@@ -17,10 +17,10 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import SwTag from '@/components/shared/SwTag';
 import CategoryLine from '@/components/closet/CategoryLine';
 import DetailScreen from './detail';
-
+import SwArrow from '@/components/shared/SwArrow';
+import TitleHeader from '@/components/shared/TitleHeader';
 const url = process.env.BASE_URL || 'http://localhost:3000'; // Đặt URL mặc định nếu không có biến môi trường
 import {Item, CategoryProps, useItemStore} from '@/constants/Item';
-import SwArrow from '@/components/shared/SwArrow';
 
 
 const HomeScreen = ({ navigation }: any) => {
@@ -33,20 +33,11 @@ const HomeScreen = ({ navigation }: any) => {
     const fetchItems = async () => {
       try {
         const id = await AsyncStorage.getItem('id');
-        // const token = await AsyncStorage.getItem('token');
-        // const response = await fetch(`${url}/items/my/${id}`, {
-        //   method: 'GET',
-        //   headers: {
-        //     'Content-Type': 'application/json',
-        //     'Authorization': `Bearer ${token}`,
-        //   },
-        // });
         const response = await api.get(`/items/my/${id}`);
         if (response.status < 200 || response.status >= 300) {
           throw new Error('Failed to fetch items');
         }
         const data = response.data;
-        console.log('Fetched items:', data);
         setItems(data);
         setCategories(getCategories(data));
       } catch (error) {
@@ -73,23 +64,32 @@ const HomeScreen = ({ navigation }: any) => {
   };
 
   const handlePress = () => {
-    useItemStore.getState().setItems({ items });
-    router.push('/closet/category');
+    router.push({
+      pathname: '/closet/category',
+      params: {
+        items: JSON.stringify(filteredItems(selectedCategory)),
+      },
+    });
+
   };
 
   return (
-    <ScrollView style={styles.container}>
-        <View style={styles.titleLine}>
-          <Text style={styles.titleText}>Kind</Text>
-          <SwArrow
-              direction="right"
-              onPress={() => handlePress()}
-              size={24}
-              color="#000"
-          />
-        </View>
-        <CategoryLine items={filteredItems('All')} />
-    </ScrollView>
+    <SafeAreaView style={{ flex: 1, backgroundColor: Colors.white}}>
+        {/* <TitleHeader title="Your Closet" showBackButton={false} /> */}
+        <ScrollView style={styles.container}>
+        { categories.map((category, index) => (
+          <View>
+            <View key={index} style={styles.titleLine}>
+              <Text style={styles.titleText}>{category}</Text>
+              <SwArrow direction="right" onPress={() => handlePress()} />
+            </View>
+            <Category items={filteredItems(category)} />
+          </View>
+        ))}
+          
+      </ScrollView>
+    </SafeAreaView>
+    
   );
 };
 
@@ -99,7 +99,8 @@ const styles = StyleSheet.create({
   container: {
     display: 'flex',
     // alignItems: 'flex-start',
-    width: Dimensions.get('window').width*0.8,
+    width: Dimensions.get('window').width,
+    paddingHorizontal: 30,
     backgroundColor: Colors.white,
   },
   logo: {

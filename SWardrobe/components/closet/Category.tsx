@@ -9,7 +9,7 @@ const Category: React.FC<CategoryProps> = ({ items = [] }) => {
           <View style={styles.grid}>
               {items.map((item, index) => (
               <View style={styles.itemWrapper} key={index}>
-                  <ItemCard item={item} />
+                  <ItemCard key={index} item={item} />
               </View>
               ))}
           </View>
@@ -22,7 +22,6 @@ export default Category;
 const styles = StyleSheet.create({
   container: {
     marginBottom: 20,
-    paddingHorizontal: 16,
   },
   grid: {
     flexDirection: 'row',
