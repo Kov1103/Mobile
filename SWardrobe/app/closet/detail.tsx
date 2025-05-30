@@ -20,7 +20,7 @@ export default function DetailScreen() {
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: Colors.white, alignItems: 'center' }}>
-        <TitleHeader title="Your Item" showBackButton={true} />
+        <TitleHeader title="Your Item" showBackButton={true} showAddButton={true} />
         <View style={styles.containerArea}>
             <ItemImage image={image as string} />
             <Text style={styles.name}>{name}</Text>
