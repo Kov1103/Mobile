@@ -57,7 +57,6 @@ const SwDatePicker: React.FC<SwDatePickerProps> = ({ label, value, onChange, min
 
 const styles = StyleSheet.create({
   container: {
-    marginBottom: 16,
   },
   label: {
     fontSize: 15,

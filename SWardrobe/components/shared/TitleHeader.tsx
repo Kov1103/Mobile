@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import TitleText from './text/TitleText';
@@ -26,8 +26,9 @@ const TitleHeader: React.FC<TitleHeaderProps> = ({ title, showBackButton = true,
       <TitleText style={styles.title}>{title}</TitleText>
       {/* <View style={styles.placeholder} /> */}
       {showAddButton ? (
-        <TouchableOpacity style={styles.backButton} onPress={() => console.log('Add button pressed')}>
-          <Ionicons name="add" size={24} color={Colors.lightPink} style={styles.addButton} />
+        <TouchableOpacity style={styles.backButton} onPress={() => router.push("/navigate/scan")}>
+          {/* <Ionicons name="add" size={24} color={Colors.lightPink} style={styles.addButton} /> */}
+          <Image source={require('../../assets/icon/Add.png')} style={styles.addButton} />
         </TouchableOpacity>
       ) : <View style={styles.placeholder} />}
     </View>
@@ -49,9 +50,8 @@ const styles = StyleSheet.create({
     padding: 8,
   },
   addButton: {
-    borderWidth: 1,
-    borderRadius: 20,
-    borderColor: Colors.lightPink,
+    width: 31,
+    height: 31,
   },
   title: {
     fontSize: 20,

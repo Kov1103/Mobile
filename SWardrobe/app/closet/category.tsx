@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, SafeAreaView, ScrollView } from 'react-native';
-import Category from '@/components/closet/Category';
+import React from 'react';
+import { View, StyleSheet, ScrollView } from 'react-native';
 import ItemCard from '@/components/closet/ItemCard';
 import { Item } from '@/constants/Item';
 import { useLocalSearchParams } from "expo-router";
 import TitleHeader from '@/components/shared/TitleHeader';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function CategoryScreen({ items = [] }: { items: Item[] }) {
     const params = useLocalSearchParams();

@@ -35,21 +35,10 @@ const styles = StyleSheet.create({
     },
     container: {
         backgroundColor: 'white',
-        height: '90%',
-    },
-    title: {
-        fontSize: 18,
-        fontWeight: 'bold',
-        marginBottom: 12,
-    },
-    button: {
-        marginTop: 20,
-        padding: 10,
-        backgroundColor: '#007AFF',
-        borderRadius: 8,
-    },
-    buttonText: {
-        color: '#fff',
-        textAlign: 'center',
+        height: '93%',
+        borderTopLeftRadius: 30,
+        borderTopRightRadius: 30,
+        overflow: 'hidden',
+        elevation: 10,
     },
 });

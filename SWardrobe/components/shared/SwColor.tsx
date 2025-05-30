@@ -1,20 +1,30 @@
-import React, { useEffect, useState } from 'react';
+import { Colors } from '@/constants/Colors';
+import React from 'react';
 import { View, StyleSheet } from 'react-native';
 
-export default function SwColor({color}: { color: string }) {
-    return (
-        <View style={[styles.colorBox, { backgroundColor: color }]}>
-        </View>
-    );
+export default function SwColor({ color }: { color: string }) {
+  return (
+    <View style={styles.outerCircle}>
+      <View style={[styles.innerCircle, { backgroundColor: color }]} />
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
-    colorBox: {
-        width: 30,
-        height: 30,
-        borderRadius: '50%',
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginRight: 10,
-    }
-})
+  outerCircle: {
+    width: 30,
+    height: 30,
+    borderRadius: "50%",
+    backgroundColor: Colors.white,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: Colors.black,
+    marginRight: 10,
+  },
+  innerCircle: {
+    width: 25,
+    height: 25,
+    borderRadius: 12,
+  },
+});

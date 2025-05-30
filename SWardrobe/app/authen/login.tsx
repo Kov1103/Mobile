@@ -141,6 +141,8 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     justifyContent: 'center',
+    flexDirection: 'column',
+    gap: 10,
     paddingVertical: 30
   },
   input: {
