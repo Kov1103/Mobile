@@ -1,19 +1,22 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, SafeAreaView, ScrollView, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, SafeAreaView, ScrollView, Dimensions, FlatList } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useRouter } from 'expo-router';
-
+import SwTag from '@/components/shared/SwTag';
 import SwArrow from '@/components/shared/SwArrow';
 import Category from '@/components/closet/Category';
 import { Colors } from '@/constants/Colors';
 import api from '@/middleware/auth';
 import { Item } from '@/constants/Item';
+import SwButton from '@/components/shared/SwButton';
+import ItemCard from '@/components/closet/ItemCard';
 
 const HomeScreen = ({ navigation }: any) => {
   const router = useRouter();
   const [items, setItems] = useState<Item[]>([]);
   const [categories, setCategories] = useState<string[]>(['All']);
   const [selectedCategory, setSelectedCategory] = useState('All');
+  const [selectedItems, setSelectedItems] = useState<string[]>(categories);
 
   useEffect(() => {
     const fetchItems = async () => {
@@ -32,6 +35,7 @@ const HomeScreen = ({ navigation }: any) => {
         const data = response.data;
         setItems(data);
         setCategories(['All', ...getCategories(data)]);
+        setSelectedItems(['All', ...getCategories(data)]);
       } catch (error) {
         console.error('Error fetching items:', error);
       }
@@ -63,16 +67,63 @@ const HomeScreen = ({ navigation }: any) => {
     });
   };
 
+  const handleButtonPress = ({ name }: { name: string }) => {
+    if (name === 'All') {
+      setSelectedItems(categories);
+      setSelectedCategory('All');
+    }
+    else {
+      setSelectedItems([name]);
+      setSelectedCategory(name);
+    }
+  };
+
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: Colors.white, marginBottom: 40 }}>
-      <ScrollView style={styles.container}>
-        {categories.map((category, index) => (
+    <SafeAreaView style={{ backgroundColor: Colors.white, marginBottom: 40 }}>
+      <FlatList
+        data={categories}
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        renderItem={({ item: category, index }) => (
+          <SwButton
+            key={index}
+            label={category}
+            onPress={() => {
+              handleButtonPress({ name: category });
+            }}
+            backgroundColor={ selectedCategory === category ? Colors.lightPink : Colors.lightYellow}
+            textColor={selectedCategory === category ? Colors.white : Colors.lightPink}
+            style={{ margin: 2, marginLeft: index === 0 ? 10 : 2 , height: 30 }}
+            width='auto'
+            fontSize={12}
+          />
+        )}
+        keyExtractor={(item, index) => item + index}   
+      />
+      <View style={{ height: 10 }} />
+      <ScrollView style={styles.container} >
+        {selectedItems.map((category, index) => (
           <View key={category || index}>
             <View style={styles.titleLine}>
-              <Text style={styles.titleText}>{category}</Text>
+              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 20 }}>
+                <Text style={styles.titleText}>{category}</Text> 
+                <Text style={{color: Colors.darkPink}}>{filteredItems(category).length}</Text>
+              </View>
               <SwArrow direction="right" onPress={() => handlePress()} />
             </View>
-            <Category items={filteredItems(category).slice(0, 2)} />
+            <FlatList
+              data={filteredItems(category)}
+              keyExtractor={(item) => item.id.toString()}
+              renderItem={({ item }) => (
+                <View style={{ marginBottom: 10}}>
+                  <ItemCard item={item} />
+                </View>
+              )}
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={{ paddingHorizontal: 10 }}
+            />
+            {/* <Category items={filteredItems(category)} /> */}
             {filteredItems(category).length === 0 && (
               <Text style={styles.emptyText}>No items in this category</Text>
             )}
@@ -88,8 +139,8 @@ export default HomeScreen;
 const styles = StyleSheet.create({
   container: {
     display: 'flex',
+    flexDirection: 'column',
     width: Dimensions.get('window').width,
-    paddingHorizontal: 30,
     backgroundColor: Colors.white,
   },
   titleLine: {
@@ -97,17 +148,22 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingVertical: 10,
+    paddingHorizontal: 30,
     width: '100%',
     marginBottom: 10,
   },
   titleText: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#333',
+    color: Colors.lightPink,
   },
   emptyText: {
     fontStyle: 'italic',
     color: '#aaa',
     paddingLeft: 10,
   },
+  scrollContent: {
+    alignItems: 'flex-start', // aligns children to the start horizontally
+    justifyContent: 'flex-start', // optional: aligns to top vertically (default)
+  }
 });
