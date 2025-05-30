@@ -3,7 +3,7 @@ import { View, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { Colors } from '@/constants/Colors';
 import { router, usePathname } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useScanContext } from '@/app/navigate/scan.context';
+import { useScanContext } from '@/service/scan.context';
 interface SwNavigatorProps {
   height?: number;
   onScanPress?: () => void;

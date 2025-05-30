@@ -6,6 +6,7 @@ import { StatusBar } from 'expo-status-bar';
 import { useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useColorScheme } from '@/hooks/useColorScheme';
+import { getUser } from '@/service/user.service';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -22,17 +23,53 @@ export default function RootLayout() {
   });
 
   const [hasSeenOnboarding, setHasSeenOnboarding] = useState<boolean | null>(null);
+  const [hasLogin, setHasLogin] = useState<boolean | null>(false);
 
   useEffect(() => {
+    let isMounted = true;
+
     const prepare = async () => {
-      const value = await AsyncStorage.getItem('hasSeenOnboarding');
-      setHasSeenOnboarding(value === 'true');
-      if (fontsLoaded) {
-        await SplashScreen.hideAsync();
+      try {
+        const value = await AsyncStorage.getItem('hasSeenOnboarding');
+        if (isMounted) {
+          setHasSeenOnboarding(value === 'true');
+        }
+        const userId = await AsyncStorage.getItem('id');
+        if (userId) {
+          const response = await getUser(Number(userId));
+          if (isMounted) {
+            setHasLogin(response.status >= 200 && response.status < 300);
+          }
+        } else {
+          if (isMounted) {
+            setHasLogin(false);
+          }
+        }
+        if (fontsLoaded && isMounted) {
+          await SplashScreen.hideAsync();
+        }
+      } catch (err) {
+        console.error('🔥 Error in prepare()', err);
+        if (isMounted) {
+          setHasLogin(false);
+          setHasSeenOnboarding(false);
+        }
+        if (fontsLoaded && isMounted) {
+          await SplashScreen.hideAsync();
+        }
       }
     };
+
     prepare();
+
+    return () => {
+      isMounted = false;
+    };
   }, [fontsLoaded]);
+
+  // useEffect(() => {
+  //   AsyncStorage.removeItem('hasSeenOnboarding');
+  // }, []);
 
   if (!fontsLoaded || hasSeenOnboarding === null) {
     return null;
@@ -41,11 +78,14 @@ export default function RootLayout() {
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <Stack screenOptions={{ headerShown: false }}>
-        {/* {!hasSeenOnboarding && (
+        {!hasSeenOnboarding ? (
           <Stack.Screen name="onboarding/index" />
-        )} */}
-        <Stack.Screen name="onboarding/index" />
-        <Stack.Screen name="launch/index" />
+        ) : hasLogin ? (
+          <Stack.Screen name="navigate" />
+        ) : (
+          <Stack.Screen name="launch/index" />
+        )}
+        {/* <Stack.Screen name="launch/index" /> */}
         <Stack.Screen name="+not-found" />
       </Stack>
       <StatusBar style="auto" />

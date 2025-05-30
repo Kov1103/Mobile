@@ -3,8 +3,9 @@ import ContentText from "@/components/shared/text/ContentText";
 import TitleHeader from "@/components/shared/TitleHeader";
 import { CameraView, useCameraPermissions } from "expo-camera";
 import { useEffect, useRef } from "react";
-import { StyleSheet, View, Image } from "react-native";
-import { useScanContext } from "./scan.context";
+import { StyleSheet, View, Image, Alert } from "react-native";
+import { useScanContext } from "../../service/scan.context";
+import api from '@/middleware/auth';
 
 export default function ScanScreen() {
   const cameraRef = useRef<any>(null);
@@ -36,7 +37,30 @@ export default function ScanScreen() {
   async function takePicture() {
     if (cameraRef.current) {
       const result = await cameraRef.current.takePictureAsync();
-      dispatch({ type: 'TOGGLE_SCANNING', payload: false });
+
+      dispatch({ type: "TOGGLE_SCANNING", payload: false });
+
+      const uri = result.uri;
+      const fileName = uri.split('/').pop() || 'photo.png';
+
+      const formData = new FormData();
+      formData.append('file', {
+        uri: uri,
+        name: fileName,
+        type: 'image/png', // hoặc 'image/jpeg' nếu là ảnh jpg
+      } as any);
+      try {
+        const response = await api.post('/items/detect', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
+
+        console.log("✅ Upload success:", response.data);
+      } catch (err) {
+        Alert.alert("Error", "Failed to upload image. Please try again.");
+        console.error("❌ Upload error:", err);
+      }
     }
   }
 

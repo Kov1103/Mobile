@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { View, StyleSheet } from 'react-native';
-import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Slot } from 'expo-router';
 import SwScanNavigator from '@/components/shared/SwScanNavigator';
 import { Colors } from '@/constants/Colors';
-import { ScanProvider } from './scan.context';
+import { ScanProvider } from '../../service/scan.context';
 
 const NAV_HEIGHT = 73;
 
