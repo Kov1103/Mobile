@@ -21,7 +21,7 @@ import { Dimensions } from 'react-native';
 const styles = StyleSheet.create({
     background: {
         backgroundColor: Colors.lightYellow,
-        borderRadius: '2%',
+        borderRadius: '10%',
         height: Dimensions.get('window').height*0.35,
         width: Dimensions.get('window').width*0.8,
         display: 'flex',

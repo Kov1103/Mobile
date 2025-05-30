@@ -11,6 +11,7 @@ interface SwTextInputProps extends TextInputProps {
   value?: string;
   onChangeText?: (text: string) => void;
   showValidationError?: boolean;
+  ref?: React.Ref<TextInput>;
 }
 
 const SwTextInput: React.FC<SwTextInputProps> = ({
@@ -20,6 +21,7 @@ const SwTextInput: React.FC<SwTextInputProps> = ({
   placeholder = 'Input Text',
   onChangeText,
   showValidationError = true,
+  ref,
   ...rest
 }) => {
   const [isFocused, setIsFocused] = useState(false);
@@ -73,12 +75,13 @@ const SwTextInput: React.FC<SwTextInputProps> = ({
     <View style={styles.container}>
       {label && <SubtitleText style={styles.label}>{label}</SubtitleText>}
       <TextInput
+        ref={ref}
         style={[
           styles.input,
-          style,
           !isFocused && styles.inputUnfocused,
           isFocused && styles.inputFocused,
           !!error && styles.inputError,
+          style,
         ]}
         autoComplete={type === 'email' ? 'email' : 'off'}
         placeholderTextColor={Colors.lightPink}
@@ -86,8 +89,8 @@ const SwTextInput: React.FC<SwTextInputProps> = ({
         secureTextEntry={type === 'password'}
         keyboardType={
           type === 'email' ? 'email-address' :
-          type === 'number' || type === 'phone' ? 'numeric' :
-          'default'
+            type === 'number' || type === 'phone' ? 'numeric' :
+              'default'
         }
         onFocus={() => setIsFocused(true)}
         onBlur={() => {
@@ -105,7 +108,7 @@ const SwTextInput: React.FC<SwTextInputProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    marginBottom: 16,
+    // marginBottom: 16,
   },
   label: {
     fontSize: 15,

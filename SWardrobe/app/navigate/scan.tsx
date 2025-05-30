@@ -2,15 +2,19 @@ import SwButton from "@/components/shared/SwButton";
 import ContentText from "@/components/shared/text/ContentText";
 import TitleHeader from "@/components/shared/TitleHeader";
 import { CameraView, useCameraPermissions } from "expo-camera";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { StyleSheet, View, Image, Alert } from "react-native";
 import { useScanContext } from "../../service/scan.context";
 import api from '@/middleware/auth';
+import ScanResultModal from "@/components/ui/ItemDetailModal";
+import { uploadImage } from "@/service/item.service";
 
 export default function ScanScreen() {
   const cameraRef = useRef<any>(null);
   const [permission, requestPermission] = useCameraPermissions();
   const { state: scanState, dispatch } = useScanContext();
+  const [modalVisible, setModalVisible] = useState(false);
+  const [resultData, setResultData] = useState<any>(null);
 
   useEffect(() => {
     if (scanState.isScanning) {
@@ -33,6 +37,20 @@ export default function ScanScreen() {
     );
   }
 
+  function getItemData(data: any) {
+    if (data) {
+      const result = {
+        image: data.image_uri || '',
+        name: 'Item Name',
+        category: [data.prediction[0]?.class],
+        color: data.dominantColors.slice(0, 3)
+      }
+      console.log("📦 Item data:", result);
+      setResultData(result);
+    }
+    return null;
+  }
+
 
   async function takePicture() {
     if (cameraRef.current) {
@@ -47,16 +65,13 @@ export default function ScanScreen() {
       formData.append('file', {
         uri: uri,
         name: fileName,
-        type: 'image/png', // hoặc 'image/jpeg' nếu là ảnh jpg
+        type: 'image/jpeg',
       } as any);
       try {
-        const response = await api.post('/items/detect', formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        });
+        const response = await uploadImage(uri, fileName);
 
-        console.log("✅ Upload success:", response.data);
+        getItemData(response);
+        setModalVisible(true);
       } catch (err) {
         Alert.alert("Error", "Failed to upload image. Please try again.");
         console.error("❌ Upload error:", err);
@@ -70,6 +85,14 @@ export default function ScanScreen() {
       <CameraView style={styles.camera} ref={cameraRef}>
         <Image source={require('../../assets/images/carrier.png')}></Image>
       </CameraView>
+      <ScanResultModal
+        visible={modalVisible}
+        data={resultData}
+        onClose={() => {
+          setModalVisible(false);
+          setResultData(null);
+        }}
+      />
     </View>
   );
 }

@@ -1,0 +1,69 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Alert } from "react-native";
+
+export const uploadImage = async (imageUri: string, fileName: string) => {
+  try {
+    const token = await AsyncStorage.getItem('token');
+    if (!token) {
+      Alert.alert('Authentication Error', 'Missing access token.');
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('file', {
+      uri: imageUri,
+      name: fileName,
+      type: 'image/jpeg',
+    } as any);
+
+    const response = await fetch(`${process.env.EXPO_PUBLIC_BASE_URL}/items/detect`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+      body: formData,
+    });
+
+    if (!response.ok) {
+      const errorData = await response.text();
+      console.error('❌ Upload failed:', response.status, errorData);
+      Alert.alert('Upload Error', 'Server returned an error. Please try again.');
+      return;
+    }
+
+    const data = await response.json();
+
+    return data;
+
+  } catch (err) {
+    throw err;
+  }
+};
+
+export const postItem = async (body: any) => {
+  try {
+    const token = await AsyncStorage.getItem('token');
+    if (!token) throw new Error('No token found');
+
+    const response = await fetch(`${process.env.EXPO_PUBLIC_BASE_URL}/items`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+      },
+      body: JSON.stringify(body),
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('❌ API error:', errorText);
+      throw new Error('Failed to post item');
+    }
+
+    const data = await response.json();
+    return data;
+
+  } catch (error) {
+    throw error;
+  }
+};

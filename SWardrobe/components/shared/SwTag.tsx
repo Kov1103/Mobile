@@ -3,6 +3,7 @@ import { View, Text } from 'react-native';
 import { Colors } from '@/constants/Colors';
 import { StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
+import SubtitleText from './text/SubtitleText';
 
 const SwTag = ({text,style}: {
     text: string;
@@ -10,10 +11,10 @@ const SwTag = ({text,style}: {
 }) => {
     const [isSelected, setIsSelected] = useState(true);
     return (
-        <View style={[styles.tag, isSelected ? styles.tagSelected : {}, style]}>
-            <Text style={{ fontFamily: 'League Spartan', fontSize: 14, color: '#000' }}>
+        <View style={[isSelected ? styles.tagSelected : styles.tag, style]}>
+            <SubtitleText style={styles.tagText}>
                 {text}
-            </Text>
+            </SubtitleText>
         </View>
     );
 }
@@ -22,20 +23,18 @@ export default SwTag;
 
 const styles = StyleSheet.create({
     tag: {
-        backgroundColor: Colors.lightYellow,
+        backgroundColor: Colors.white,
         borderRadius: 20,
         paddingHorizontal: 12,
         paddingVertical: 6,
-        marginRight: 8,
-        alignSelf: 'flex-start', // 👈 quan trọng để fit content
+        // alignSelf: 'flex-start', 
         },
     tagText: {
-        fontFamily: 'League Spartan',
         fontSize: 14,
-        color: '#000',
+        color: Colors.darkPink
     },
     tagSelected: {
-        backgroundColor: Colors.lightPink,
+        backgroundColor: Colors.pink,
         borderRadius: 20,
         paddingHorizontal: 12,
         paddingVertical: 6,
