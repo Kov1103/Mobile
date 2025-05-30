@@ -8,9 +8,10 @@ import { Colors } from '@/constants/Colors';
 interface TitleHeaderProps {
   title: string;
   showBackButton?: boolean;
+  showAddButton?: boolean; 
 }
 
-const TitleHeader: React.FC<TitleHeaderProps> = ({ title, showBackButton = true }) => {
+const TitleHeader: React.FC<TitleHeaderProps> = ({ title, showBackButton = true, showAddButton = false}) => {
   const router = useRouter();
 
   return (
@@ -23,7 +24,12 @@ const TitleHeader: React.FC<TitleHeaderProps> = ({ title, showBackButton = true 
         <View style={styles.placeholder} />
       )}
       <TitleText style={styles.title}>{title}</TitleText>
-      <View style={styles.placeholder} />
+      {/* <View style={styles.placeholder} /> */}
+      {showAddButton ? (
+        <TouchableOpacity style={styles.backButton} onPress={() => console.log('Add button pressed')}>
+          <Ionicons name="add" size={24} color={Colors.lightPink} style={styles.addButton} />
+        </TouchableOpacity>
+      ) : <View style={styles.placeholder} />}
     </View>
   );
 };
@@ -41,6 +47,11 @@ const styles = StyleSheet.create({
   },
   backButton: {
     padding: 8,
+  },
+  addButton: {
+    borderWidth: 1,
+    borderRadius: 20,
+    borderColor: Colors.lightPink,
   },
   title: {
     fontSize: 20,

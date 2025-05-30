@@ -8,7 +8,7 @@ const ClosetScreen = ({ navigation }: any) => {
     const router = useRouter();
     return (
        <View style={{ flex: 1 }}>
-            <TitleHeader title="Your Closet" showBackButton={false} />
+            <TitleHeader title="Your Closet" showBackButton={true} showAddButton={true} />
             <View style={styles.containerArea}>
                 <HomeScreen navigation={navigation} />
             </View>
@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: Colors.white,
-        // justifyContent: 'space-between',
+        justifyContent: 'space-between',
         alignItems: 'center',
     },
     containerArea: {
