@@ -37,11 +37,6 @@ export default function SignUp({ navigation }: SignUpProps) {
         Alert.alert('Error', 'Passwords do not match');
         return;
       }
-      // const response = await fetch(`${process.env.BASE_URL}/users/register`, {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify({ full_name, email, password, mobileNumber, date }),
-      // });
       const response = await api.post('/users/register', {
         full_name,
         email,
@@ -52,26 +47,10 @@ export default function SignUp({ navigation }: SignUpProps) {
       if (response.status < 200 || response.status >= 300) {
         throw new Error('Sign up failed');
       }
-      const data = response.data;
-      // Lưu token vào AsyncStorage
-      if (data) {
-        // // Save the token
-        await AsyncStorage.setItem('token', data.access_token);
 
-        // Decode safely
-        try {
-          const user = data.user;
-          await AsyncStorage.setItem('id', user.id.toString());
-        } catch (decodeErr) {
-          console.error('JWT decode failed:', decodeErr);
-        }
-      } else {
-        console.error('Signup failed: ', data);
-      }
-
-        Alert.alert('Success', `Logged in as ${email}`);
-        router.push("/navigate/home");
-      } 
+      Alert.alert('Success', `Your account as ${email} has been created successfully! Please log in to continue.`);
+      router.push("/launch");
+    }
     catch (error) {
       const errorMessage =
         error instanceof Error ? error.message : 'An error occurred during sign up';

@@ -24,8 +24,6 @@ type JwtPayload = {
   exp: number;
 };
 
-const url = process.env.BASE_URL || 'http://localhost:3000'; // Đặt URL mặc định nếu không có biến môi trường
-
 export default function Login({ navigation }: LoginProps) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');

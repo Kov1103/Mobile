@@ -47,6 +47,8 @@ const SwTextInput: React.FC<SwTextInputProps> = ({
     } else if (type === 'phone') {
       const digits = text.replace(/\D/g, '');
       setError(digits.length === 10 ? '' : 'Phone number must be 10 digits');
+    } else if (text === '') {
+      setError('This field is required');
     } else {
       setError('');
     }

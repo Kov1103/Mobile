@@ -3,7 +3,7 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const api = axios.create({
-  baseURL: process.env.BASE_URL || "http://localhost:3000", // Thay bằng URL của bạn
+  baseURL: process.env.EXPO_PUBLIC_BASE_URL, // Thay bằng URL của bạn
   timeout: 10000,
 });
 
