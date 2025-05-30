@@ -1,23 +1,35 @@
 import React from 'react';
 import { View, Image, StyleSheet, ImageStyle } from 'react-native';
 import TitleText from './text/TitleText';
+import { Colors } from '@/constants/Colors';
 
 interface SwLogoProps {
     height?: number;
     hasTitle?: boolean;
     fontSize?: number;
+    isWhite?: boolean;
 }
 
-const SwLogo: React.FC<SwLogoProps> = ({ height = 100, hasTitle = true, fontSize = 45 }) => {
+const SwLogo: React.FC<SwLogoProps> = ({ height = 100, hasTitle = true, fontSize = 45, isWhite = false }) => {
     return (
         <View style={styles.container}>
             <Image
-                source={require('../../assets/icon/logo.png')}
+                source={
+                    isWhite
+                        ? require('../../assets/icon/logo-white.png')
+                        : require('../../assets/icon/logo.png')
+                }
                 style={[styles.logo, { height } as ImageStyle]}
                 resizeMode="contain"
             />
             {hasTitle && (
-                <TitleText style={[styles.title, { fontSize }]}>{'SWardrobe'}</TitleText>
+                <TitleText
+                    style={[
+                        { fontSize, color: isWhite ? Colors.white : Colors.pink }
+                    ]}
+                >
+                    {'SWardrobe'}
+                </TitleText>
             )}
         </View>
     );
@@ -32,9 +44,6 @@ const styles = StyleSheet.create({
     logo: {
         marginBottom: 20,
         aspectRatio: 1, // giữ tỉ lệ hình vuông khi thay đổi chiều cao
-    },
-    title: {
-        color: '#EFAF9B',
     },
 });
 
