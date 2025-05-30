@@ -16,14 +16,16 @@ interface ItemDetailProps {
   name: string;
   category: string[];
   color: string[];
+  addButton?: boolean;
   onAddSuccess?: () => void;
 }
-const ItemDetailComponent: React.FC<ItemDetailProps> = ({ image, name, category, color, onAddSuccess }) => {
+const ItemDetailComponent: React.FC<ItemDetailProps> = ({ image, name, category, color, onAddSuccess = () => { }, addButton = true }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editedName, setEditedName] = useState(name);
   const inputRef = useRef<TextInput>(null);
 
   useEffect(() => {
+    setEditedName(name);
     if (isEditing) {
       setTimeout(() => {
         inputRef.current?.focus();
@@ -50,12 +52,12 @@ const ItemDetailComponent: React.FC<ItemDetailProps> = ({ image, name, category,
     });
   }
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: Colors.white, alignItems: 'center' }}>
-      <TouchableWithoutFeedback onPress={() => setIsEditing(false)}>
-        <View style={styles.containerArea}>
-          <ItemImage image={image as string} />
-          <View style={styles.nameContainer}>
-            {isEditing ? (
+    <TouchableWithoutFeedback onPress={() => setIsEditing(false)} style={styles.container}>
+      <View style={styles.containerArea}>
+        <ItemImage image={image as string} />
+        <View style={styles.nameContainer}>
+          {addButton ? (
+            isEditing ? (
               <SwTextInput
                 ref={inputRef}
                 value={editedName}
@@ -66,42 +68,46 @@ const ItemDetailComponent: React.FC<ItemDetailProps> = ({ image, name, category,
               />
             ) : (
               <TitleText style={styles.name}>{editedName}</TitleText>
+            )
+          ) : (
+            <TitleText style={styles.name}>{name}</TitleText>
+          )}
+
+          {!isEditing && addButton && (
+            <TouchableOpacity onPress={() => setIsEditing(true)}>
+              <Image style={{ width: 20, height: 20 }} source={require('../../assets/icon/Bot-Edit.png')} />
+            </TouchableOpacity>
+          )}
+        </View>
+
+        <View style={styles.line}>
+          <SubtitleText style={styles.text}>Categories</SubtitleText>
+          <View style={styles.itemLine}>
+            {category && category?.length > 0 ? (
+              category?.map((cat: string, index: number) => (
+                <SwTag key={index} text={cat} />
+              ))
+            ) : (
+              <Text>No category is picked</Text>
             )}
-
-            {!isEditing && (
-              <TouchableOpacity onPress={() => setIsEditing(true)}>
-                <Image source={require('../../assets/icon/Bot-Edit.png')} />
-              </TouchableOpacity>
-            )}
           </View>
+        </View>
 
-          <View style={styles.line}>
-            <SubtitleText style={styles.text}>Categories</SubtitleText>
-            <View style={styles.itemLine}>
-              {Array.isArray(category) && category.length > 0 ? (
-                category.map((cat: string, index: number) => (
-                  <SwTag key={index} text={cat} />
-                ))
-              ) : (
-                <Text>No category is picked</Text>
-              )}
-            </View>
+        <View style={styles.line}>
+          <SubtitleText style={styles.text}>Colors</SubtitleText>
+          <View style={styles.itemLine}>
+            {color?.map((col: string, index: number) => (
+              <SwColor key={index} color={col} />
+            ))}
           </View>
-
-          <View style={styles.line}>
-            <SubtitleText style={styles.text}>Colors</SubtitleText>
-            <View style={styles.itemLine}>
-              {color.map((col: string, index: number) => (
-                <SwColor key={index} color={col} />
-              ))}
-            </View>
-          </View>
+        </View>
+        {addButton && (
           <View style={styles.buttonContainer}>
             <SwButton label="Add" onPress={addItem} backgroundColor={Colors.pink} textColor={Colors.darkPink} width="50%" height={41}></SwButton>
           </View>
-        </View>
-      </TouchableWithoutFeedback>
-    </SafeAreaView>
+        )}
+      </View>
+    </TouchableWithoutFeedback>
   );
 }
 
@@ -109,13 +115,14 @@ export default ItemDetailComponent;
 
 const styles = StyleSheet.create({
   container: {
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     alignItems: 'center',
   },
   containerArea: {
     flex: 1,
     flexDirection: 'column',
     marginTop: 20,
+    paddingHorizontal: 40,
   },
   nameContainer: {
     flexDirection: 'row',
@@ -144,6 +151,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: 10,
     marginVertical: 5,
+    flexWrap: 'wrap',
   },
   buttonContainer: {
     flex: 1,

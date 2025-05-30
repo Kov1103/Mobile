@@ -140,6 +140,9 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     justifyContent: 'center',
+    flexDirection: 'column',
+    gap: 10,
+    marginBottom: 20,
   },
   input: {
     borderColor: '#E9957C',

@@ -9,6 +9,7 @@ type ItemCardProps = {
 };
 
 import { useRouter } from "expo-router";
+import ContentText from '../shared/text/ContentText';
 
 const ItemCard: React.FC<ItemCardProps> = ({ item }) => {
   const router = useRouter();
@@ -17,10 +18,7 @@ const ItemCard: React.FC<ItemCardProps> = ({ item }) => {
     router.push({
       pathname: "/closet/detail",
       params: {
-        image: item.image[0],
-        name: item.name,
-        category: JSON.stringify(item.category),
-        color: JSON.stringify(item.color),
+        id: item.id,
       }
     });
   };
@@ -29,7 +27,7 @@ const ItemCard: React.FC<ItemCardProps> = ({ item }) => {
     <TouchableOpacity onPress={handlePress}>
       <View style={styles.card}>
         <Image source={{ uri: item.image[0] }} style={styles.image} />
-        <Text style={styles.name}>{item.name}</Text>
+        <ContentText style={styles.name}>{item.name}</ContentText>
       </View>
     </TouchableOpacity>
   );
@@ -55,14 +53,15 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.1,
     shadowRadius: 4,
-    elevation: 4, // Android shadow (only bottom and right)
+    elevation: 4,
     height: 140,
     width: 150,
   },
   name: {
-    fontFamily: 'League Spartan',
     fontSize: 14,
     marginTop: 15,
+    paddingHorizontal: 10,
+    textAlign: 'center',
   },
   image: {
     width: 60,

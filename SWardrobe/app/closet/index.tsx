@@ -2,16 +2,16 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, SafeAreaView, ScrollView, Dimensions, FlatList } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useRouter } from 'expo-router';
-import SwTag from '@/components/shared/SwTag';
 import SwArrow from '@/components/shared/SwArrow';
-import Category from '@/components/closet/Category';
 import { Colors } from '@/constants/Colors';
 import api from '@/middleware/auth';
 import { Item } from '@/constants/Item';
 import SwButton from '@/components/shared/SwButton';
 import ItemCard from '@/components/closet/ItemCard';
+import TitleText from '@/components/shared/text/TitleText';
+import SubtitleText from '@/components/shared/text/SubtitleText';
 
-const HomeScreen = ({ navigation }: any) => {
+const ClosetContentScreen = ({ navigation }: any) => {
   const router = useRouter();
   const [items, setItems] = useState<Item[]>([]);
   const [categories, setCategories] = useState<string[]>(['All']);
@@ -79,26 +79,27 @@ const HomeScreen = ({ navigation }: any) => {
   };
 
   return (
-    <SafeAreaView style={{ backgroundColor: Colors.white, marginBottom: 40 }}>
+    <SafeAreaView style={{ backgroundColor: Colors.white, marginBottom: 40, marginLeft: 20 }}>
       <FlatList
         data={categories}
         horizontal
         showsHorizontalScrollIndicator={false}
         renderItem={({ item: category, index }) => (
-          <SwButton
-            key={index}
-            label={category}
-            onPress={() => {
-              handleButtonPress({ name: category });
-            }}
-            backgroundColor={ selectedCategory === category ? Colors.lightPink : Colors.lightYellow}
-            textColor={selectedCategory === category ? Colors.white : Colors.lightPink}
-            style={{ margin: 2, marginLeft: index === 0 ? 10 : 2 , height: 30 }}
-            width='auto'
-            fontSize={12}
-          />
+          <View style={{ paddingVertical: 2, paddingHorizontal: 2 }}>
+            <SwButton
+              key={index}
+              label={category}
+              onPress={() => {
+                handleButtonPress({ name: category });
+              }}
+              backgroundColor={selectedCategory === category ? Colors.pink : Colors.white}
+              textColor={selectedCategory === category ? Colors.darkPink : Colors.darkPink}
+              style={{ margin: 2, marginLeft: index === 0 ? 10 : 2, height: 30, borderColor: !(selectedCategory === category) ? Colors.pink : undefined, borderWidth: !(selectedCategory === category) ? 1 : 0 }}
+              fontSize={12}
+            />
+          </View>
         )}
-        keyExtractor={(item, index) => item + index}   
+        keyExtractor={(item, index) => item + index}
       />
       <View style={{ height: 10 }} />
       <ScrollView style={styles.container} >
@@ -106,8 +107,8 @@ const HomeScreen = ({ navigation }: any) => {
           <View key={category || index}>
             <View style={styles.titleLine}>
               <View style={{ flexDirection: 'row', alignItems: 'center', gap: 20 }}>
-                <Text style={styles.titleText}>{category}</Text> 
-                <Text style={{color: Colors.darkPink}}>{filteredItems(category).length}</Text>
+                <TitleText style={styles.titleText}>{category}</TitleText>
+                <SubtitleText style={{ color: Colors.darkPink, fontSize: 15 }}>{filteredItems(category).length}</SubtitleText>
               </View>
               <SwArrow direction="right" onPress={() => handlePress()} />
             </View>
@@ -115,15 +116,14 @@ const HomeScreen = ({ navigation }: any) => {
               data={filteredItems(category)}
               keyExtractor={(item) => item.id.toString()}
               renderItem={({ item }) => (
-                <View style={{ marginBottom: 10}}>
+                <View style={{ marginBottom: 10 }}>
                   <ItemCard item={item} />
                 </View>
               )}
               horizontal
               showsHorizontalScrollIndicator={false}
-              contentContainerStyle={{ paddingHorizontal: 10 }}
+              contentContainerStyle={{ paddingRight: 30 }}
             />
-            {/* <Category items={filteredItems(category)} /> */}
             {filteredItems(category).length === 0 && (
               <Text style={styles.emptyText}>No items in this category</Text>
             )}
@@ -134,7 +134,7 @@ const HomeScreen = ({ navigation }: any) => {
   );
 };
 
-export default HomeScreen;
+export default ClosetContentScreen;
 
 const styles = StyleSheet.create({
   container: {
@@ -148,14 +148,12 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingVertical: 10,
-    paddingHorizontal: 30,
-    width: '100%',
+    paddingHorizontal: 20,
     marginBottom: 10,
   },
   titleText: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: Colors.lightPink,
+    fontSize: 20,
+    color: Colors.pink,
   },
   emptyText: {
     fontStyle: 'italic',
