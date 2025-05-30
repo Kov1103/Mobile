@@ -23,7 +23,7 @@ const SwDatePicker: React.FC<SwDatePickerProps> = ({ label, value, onChange, min
   };
 
   const formatDate = (date: Date): string => {
-    return date.toLocaleDateString('en-GB'); // dd/mm/yyyy
+    return date.toLocaleDateString('en-GB');
   };
 
   return (

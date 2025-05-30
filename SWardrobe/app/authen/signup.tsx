@@ -7,9 +7,9 @@ import TitleText from '@/components/shared/text/TitleText';
 import TitleHeader from '@/components/shared/TitleHeader';
 import { Colors } from '@/constants/Colors';
 import { router } from 'expo-router';
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { View, StyleSheet, KeyboardAvoidingView, Platform, Alert, TouchableOpacity, TouchableWithoutFeedback, Keyboard } from 'react-native';
-import { Image } from 'react-native';
+import { Image, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { jwtDecode } from 'jwt-decode';
@@ -19,6 +19,7 @@ interface SignUpProps {
 }
 
 export default function SignUp({ navigation }: SignUpProps) {
+  const scrollViewRef = useRef<ScrollView>(null);
   const [full_name, setFull_name] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -59,51 +60,69 @@ export default function SignUp({ navigation }: SignUpProps) {
     };
   }
 
+  useEffect(() => {
+    const keyboardHideListener = Keyboard.addListener('keyboardDidHide', () => {
+      scrollViewRef.current?.scrollTo({ y: 0, animated: true });
+    });
+
+    return () => {
+      keyboardHideListener.remove();
+    };
+  }, []);
+
+
   return (
     <SafeAreaView style={styles.container}>
       <TitleHeader title="Create Account"></TitleHeader>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <KeyboardAvoidingView style={styles.containerArea}
-          behavior={Platform.select({ ios: 'padding', android: undefined })}
+          behavior={Platform.select({ ios: 'padding', android: 'padding' })} enabled
         >
-          <View style={styles.inputContainer}>
-            <SwTextInput label="Full Name" type="default" placeholder='Input Your Full Name' value={full_name} onChangeText={setFull_name}></SwTextInput>
-            <SwTextInput label="Email" type="email" placeholder='Input Your Email' value={email} onChangeText={setEmail}></SwTextInput>
-            <SwTextInput label="Mobile Number" type="phone" placeholder='0123 456 789' value={mobileNumber} onChangeText={setMobileNumber}></SwTextInput>
-            {/* <SwTextInput label="Date of Birth" type="default" placeholder='DD/MM/YYYY'></SwTextInput> */}
-            <SwDatePicker
-              label="Date of Birth"
-              value={date}
-              onChange={setDate}
-              minimumDate={new Date(1900, 0, 1)}
-              maximumDate={new Date()}
-            />
-            <SwTextInput label="Password" type="password" placeholder='Enter password' value={password} onChangeText={setPassword}></SwTextInput>
-            <SwTextInput label="Confirm Password" type="password" placeholder='Enter confirm password' value={confirmPassword} onChangeText={setConfirmPassword}></SwTextInput>
-          </View>
-          <View style={styles.buttonContainer}>
-            <ContentText style={{ textAlign: 'center', width: 195 }}>
-              By continuing, you agree to{' '}
-              <BoldContentText>Terms of Use</BoldContentText> and{' '}
-              <BoldContentText>Privacy Policy</BoldContentText>.
-            </ContentText>
-            <SwButton
-              label="Sign Up"
-              onPress={handleSignUP}
-              backgroundColor={Colors.pink}
-              textColor={Colors.darkPink}
-              width={186}
-              height={41}
-            />
-          </View>
-          <View style={styles.signUpContainer}>
-            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 5 }}>
-              <ContentText>Already have an account?</ContentText>
-              <TouchableOpacity onPress={() => router.push('/authen/login')}>
-                <ContentText style={{ color: Colors.darkPink }}>Log In</ContentText>
-              </TouchableOpacity>
+          <ScrollView
+          ref={scrollViewRef}
+            contentContainerStyle={{ paddingBottom: 200 }}
+            keyboardShouldPersistTaps="handled"
+            showsVerticalScrollIndicator={false}
+          >
+            <View style={styles.inputContainer}>
+              <SwTextInput label="Full Name" type="default" placeholder='Input Your Full Name' value={full_name} onChangeText={setFull_name}></SwTextInput>
+              <SwTextInput label="Email" type="email" placeholder='Input Your Email' value={email} onChangeText={setEmail}></SwTextInput>
+              <SwTextInput label="Mobile Number" type="phone" placeholder='0123 456 789' value={mobileNumber} onChangeText={setMobileNumber}></SwTextInput>
+              {/* <SwTextInput label="Date of Birth" type="default" placeholder='DD/MM/YYYY'></SwTextInput> */}
+              <SwDatePicker
+                label="Date of Birth"
+                value={date}
+                onChange={setDate}
+                minimumDate={new Date(1900, 0, 1)}
+                maximumDate={new Date()}
+              />
+              <SwTextInput label="Password" type="password" placeholder='Enter password' value={password} onChangeText={setPassword}></SwTextInput>
+              <SwTextInput label="Confirm Password" type="password" placeholder='Enter confirm password' value={confirmPassword} onChangeText={setConfirmPassword}></SwTextInput>
             </View>
-          </View>
+            <View style={styles.buttonContainer}>
+              <ContentText style={{ textAlign: 'center', width: 195 }}>
+                By continuing, you agree to{' '}
+                <BoldContentText>Terms of Use</BoldContentText> and{' '}
+                <BoldContentText>Privacy Policy</BoldContentText>.
+              </ContentText>
+              <SwButton
+                label="Sign Up"
+                onPress={handleSignUP}
+                backgroundColor={Colors.pink}
+                textColor={Colors.darkPink}
+                width={186}
+                height={41}
+              />
+            </View>
+            <View style={styles.signUpContainer}>
+              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 5 }}>
+                <ContentText>Already have an account?</ContentText>
+                <TouchableOpacity onPress={() => router.push('/authen/login')}>
+                  <ContentText style={{ color: Colors.darkPink }}>Log In</ContentText>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </ScrollView>
         </KeyboardAvoidingView>
       </TouchableWithoutFeedback>
     </SafeAreaView>
@@ -117,18 +136,15 @@ const styles = StyleSheet.create({
   },
   containerArea: {
     flex: 1,
-    justifyContent: 'space-between',
-    paddingHorizontal: 30
+    paddingHorizontal: 30,
   },
   inputContainer: {
     justifyContent: 'center',
-    paddingVertical: 20
   },
   input: {
     borderColor: '#E9957C',
     borderWidth: 1,
     borderRadius: 10,
-    marginBottom: 20,
     paddingHorizontal: 15,
     fontSize: 16,
   },
@@ -140,7 +156,6 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   signUpContainer: {
-    flex: 1,
     flexDirection: 'column',
     gap: 15,
     justifyContent: 'center',
