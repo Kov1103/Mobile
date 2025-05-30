@@ -1,5 +1,4 @@
 import { Colors } from '@/constants/Colors';
-import { useRouter } from 'expo-router';
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import TitleHeader from '@/components/shared/TitleHeader';
