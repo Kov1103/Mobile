@@ -45,7 +45,7 @@ const SwDatePicker: React.FC<SwDatePickerProps> = ({ label, value, onChange, min
         <DateTimePicker
           value={value}
           mode="date"
-          display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+          display={'default'}
           onChange={onChangeDate}
           minimumDate={minimumDate}
           maximumDate={maximumDate}
