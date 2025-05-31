@@ -68,25 +68,28 @@ export const postItem = async (body: any) => {
   }
 };
 
-export const getItem = async (id: number): Promise<any> => {
+export const getAllItems = async (user_id = "1") => {
   try {
     const token = await AsyncStorage.getItem('token');
-    const response = await fetch(`${process.env.EXPO_PUBLIC_BASE_URL}/items/${id}`, {
+    if (!token) throw new Error('No token found');
+
+    const response = await fetch(`${process.env.EXPO_PUBLIC_BASE_URL}/items/my/${user_id}`, {
       method: 'GET',
       headers: {
-        'Accept': 'application/json',
         'Authorization': `Bearer ${token}`,
       },
     });
 
     if (!response.ok) {
       const errorText = await response.text();
-      throw new Error(`Failed to fetch item: ${errorText}`);
+      console.error('❌ API error:', errorText);
+      throw new Error('Failed to fetch items');
     }
 
     const data = await response.json();
     return data;
+
   } catch (error) {
     throw error;
   }
-};
+}

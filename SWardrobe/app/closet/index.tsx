@@ -4,12 +4,13 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useRouter } from 'expo-router';
 import SwArrow from '@/components/shared/SwArrow';
 import { Colors } from '@/constants/Colors';
-import api from '@/middleware/auth';
 import { Item } from '@/constants/Item';
 import SwButton from '@/components/shared/SwButton';
 import ItemCard from '@/components/closet/ItemCard';
 import TitleText from '@/components/shared/text/TitleText';
 import SubtitleText from '@/components/shared/text/SubtitleText';
+import { getAllItems } from '@/service/item.service';
+import Loading from '@/components/loading';
 
 const ClosetContentScreen = ({ navigation }: any) => {
   const router = useRouter();
@@ -17,6 +18,7 @@ const ClosetContentScreen = ({ navigation }: any) => {
   const [categories, setCategories] = useState<string[]>(['All']);
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [selectedItems, setSelectedItems] = useState<string[]>(categories);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchItems = async () => {
@@ -27,17 +29,16 @@ const ClosetContentScreen = ({ navigation }: any) => {
           return;
         }
 
-        const response = await api.get(`/items/my/${id}`);
-        if (response.status < 200 || response.status >= 300) {
-          throw new Error('Failed to fetch items');
-        }
-
-        const data = response.data;
+        setLoading(true);
+        const data = await getAllItems(id);
         setItems(data);
         setCategories(['All', ...getCategories(data)]);
         setSelectedItems(['All', ...getCategories(data)]);
       } catch (error) {
         console.error('Error fetching items:', error);
+      }
+      finally {
+        setLoading(false);
       }
     };
 
@@ -79,7 +80,10 @@ const ClosetContentScreen = ({ navigation }: any) => {
   };
 
   return (
-    <SafeAreaView style={{ backgroundColor: Colors.white, marginBottom: 40, marginLeft: 20 }}>
+    loading ? (
+      <Loading text="Loading items..." />
+    ) : 
+    <SafeAreaView style={{ backgroundColor: Colors.white, marginBottom: 40 }}>
       <FlatList
         data={categories}
         horizontal

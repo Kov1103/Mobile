@@ -5,7 +5,6 @@ import { CameraView, useCameraPermissions } from "expo-camera";
 import { useEffect, useRef, useState } from "react";
 import { StyleSheet, View, Image, Alert } from "react-native";
 import { useScanContext } from "../../service/scan.context";
-import api from '@/middleware/auth';
 import ScanResultModal from "@/components/ui/ItemDetailModal";
 import { uploadImage } from "@/service/item.service";
 

@@ -21,10 +21,8 @@ export default function RootLayout() {
     'Poppins-Regular': require('../assets/fonts/Poppins-Regular.ttf'),
     'LeagueSpartan-SemiBold': require('../assets/fonts/LeagueSpartan-SemiBold.ttf'),
   });
-
   const [hasSeenOnboarding, setHasSeenOnboarding] = useState<boolean | null>(null);
   const [hasLogin, setHasLogin] = useState<boolean | null>(false);
-
   useEffect(() => {
     let isMounted = true;
 

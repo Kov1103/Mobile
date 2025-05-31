@@ -3,17 +3,15 @@ import SwDatePicker from '@/components/shared/SwDatePicker';
 import SwTextInput from '@/components/shared/SwTextInput';
 import BoldContentText from '@/components/shared/text/BoldContentText';
 import ContentText from '@/components/shared/text/ContentText';
-import TitleText from '@/components/shared/text/TitleText';
 import TitleHeader from '@/components/shared/TitleHeader';
 import { Colors } from '@/constants/Colors';
 import { router } from 'expo-router';
 import React, { useState, useRef, useEffect } from 'react';
 import { View, StyleSheet, KeyboardAvoidingView, Platform, Alert, TouchableOpacity, TouchableWithoutFeedback, Keyboard } from 'react-native';
-import { Image, ScrollView } from 'react-native';
+import { ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { jwtDecode } from 'jwt-decode';
-import api from '@/middleware/auth'; // Giả sử bạn có một file api.js để quản lý các endpoint
+import Loading from '@/components/loading';
+import { signUp } from '@/middleware/auth'; // Giả sử bạn đã tạo middleware auth để xử lý đăng ký
 interface SignUpProps {
   navigation: any; // hoặc bạn dùng expo-router thì dùng useRouter
 }
@@ -26,6 +24,7 @@ export default function SignUp({ navigation }: SignUpProps) {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [mobileNumber, setMobileNumber] = useState('');
   const [date, setDate] = useState(new Date());
+  const [loading, setLoading] = useState(false);
 
   const handleSignUP = async () => {
     // Thêm logic xác thực ở đây
@@ -38,16 +37,17 @@ export default function SignUp({ navigation }: SignUpProps) {
         Alert.alert('Error', 'Passwords do not match');
         return;
       }
-      const response = await api.post('/users/register', {
+      setLoading(true);
+      const response = await signUp(
         full_name,
         email,
         password,
         mobileNumber,
-        date: date.toISOString().split('T')[0], // Chuyển đổi ngày sang định dạng YYYY-MM-DD
-      });
-      if (response.status < 200 || response.status >= 300) {
-        throw new Error('Sign up failed');
-      }
+        date
+      );
+      // if (response.status < 200 || response.status >= 300) {
+      //   throw new Error('Sign up failed');
+      // }
 
       Alert.alert('Success', `Your account as ${email} has been created successfully! Please log in to continue.`);
       router.push("/launch");
@@ -57,6 +57,9 @@ export default function SignUp({ navigation }: SignUpProps) {
         error instanceof Error ? error.message : 'An error occurred during sign up';
       Alert.alert('Error', errorMessage);
       return;
+    }
+    finally {
+      setLoading(false);
     };
   }
 
@@ -72,6 +75,9 @@ export default function SignUp({ navigation }: SignUpProps) {
 
 
   return (
+    loading ? (
+      <Loading text="Signing up..." />
+    ) :
     <SafeAreaView style={styles.container}>
       <TitleHeader title="Create Account"></TitleHeader>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>

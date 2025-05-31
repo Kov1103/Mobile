@@ -1,5 +1,4 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 export const getUser = async (id: number): Promise<any> => {
   try {
     const token = await AsyncStorage.getItem('token');
@@ -17,8 +16,10 @@ export const getUser = async (id: number): Promise<any> => {
     }
 
     const data = await response.json();
+    await AsyncStorage.setItem('token', data.token);
     return data;
   } catch (error) {
     throw error;
   }
 };
+

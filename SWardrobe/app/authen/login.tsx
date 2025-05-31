@@ -10,9 +10,9 @@ import React, { useState } from 'react';
 import { View, StyleSheet, KeyboardAvoidingView, Platform, Alert, TouchableOpacity, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { jwtDecode } from 'jwt-decode';
-import api from '@/middleware/auth'; // Giả sử bạn có một file api.js để quản lý các endpoint
-
+import Loading from '@/components/loading';
+// import { logIn } from '@/service/user.service';
+import {api, logIn} from '@/middleware/auth';
 interface LoginProps {
   navigation: any; // hoặc bạn dùng expo-router thì dùng useRouter
 }
@@ -27,6 +27,7 @@ type JwtPayload = {
 export default function Login({ navigation }: LoginProps) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const handleLogin = async () => {
     // Thêm logic xác thực ở đây
@@ -34,35 +35,22 @@ export default function Login({ navigation }: LoginProps) {
       Alert.alert('Error', 'Please fill email and password');
       return;
     }
-
     try {
-      const response = await api.post('/users/login', {
-        email,
-        password,
-      });
-      if (response.status < 200 || response.status >= 300) {
-        console.log(response)
-        throw new Error('Login failed');
-      }
-      const data = response.data;
-      // Lưu token vào AsyncStorage
+      setLoading(true);
+      
+      const data = await logIn(email, password);
       if (data) {
-        // // Save the token
-        await AsyncStorage.setItem('token', data.access_token);
-
-        // Decode safely
         try {
           const user = data.user;
           await AsyncStorage.setItem('id', user.id.toString());
         } catch (decodeErr) {
           console.error('JWT decode failed:', decodeErr);
-        }
+        } 
+        Alert.alert('Success', `Logged in as ${email}`);
+        router.push("/navigate/home");
       } else {
         console.error('Login failed: No token returned', data);
       }
-
-      Alert.alert('Success', `Logged in as ${email}`);
-      router.push("/navigate/home");
     } 
     catch (error) {
       const errorMessage =
@@ -71,48 +59,55 @@ export default function Login({ navigation }: LoginProps) {
       Alert.alert('Error', errorMessage);
       return;
     }
+    finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <TitleHeader title="Log In"></TitleHeader>
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <KeyboardAvoidingView style={styles.containerArea}
-          behavior={Platform.select({ ios: 'padding', android: undefined })}
-        >
-          <View style={styles.welcomeContainer}>
-            <TitleText style={styles.welcomeText}>Welcome</TitleText>
-            <ContentText style={styles.welcomeContentText}>Please enter your details to proceed.</ContentText>
-          </View>
+    loading ? (
+      <Loading text="Logging in..." />
+    ) : (
+      <SafeAreaView style={styles.container}>
+        <TitleHeader title="Log In"></TitleHeader>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <KeyboardAvoidingView style={styles.containerArea}
+            behavior={Platform.select({ ios: 'padding', android: undefined })}
+          >
+            <View style={styles.welcomeContainer}>
+              <TitleText style={styles.welcomeText}>Welcome</TitleText>
+              <ContentText style={styles.welcomeContentText}>Please enter your details to proceed.</ContentText>
+            </View>
 
-          <View style={styles.inputContainer}>
-            <SwTextInput label="Email" type="email" placeholder='example@gmail.com' onChangeText={setEmail}></SwTextInput>
-            <SwTextInput label="Password" type="password" placeholder='Enter password' onChangeText={setPassword}></SwTextInput>
-          </View>
-          <View style={styles.buttonContainer}>
-            <SwButton
-              label="Log In"
-              onPress={handleLogin}
-              backgroundColor={Colors.pink}
-              textColor={Colors.darkPink}
-              width={186}
-              height={41}
-            />
-            <TouchableOpacity>
-              <BoldContentText style={{ color: Colors.black }}>Forgot Password?</BoldContentText>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.signUpContainer}>
-            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 5 }}>
-              <ContentText>Don't have an account?</ContentText>
-              <TouchableOpacity onPress={() => router.push('/authen/signup')}>
-                <ContentText style={{ color: Colors.darkPink }}>Sign Up</ContentText>
+            <View style={styles.inputContainer}>
+              <SwTextInput label="Email" type="email" placeholder='example@gmail.com' onChangeText={setEmail}></SwTextInput>
+              <SwTextInput label="Password" type="password" placeholder='Enter password' onChangeText={setPassword}></SwTextInput>
+            </View>
+            <View style={styles.buttonContainer}>
+              <SwButton
+                label="Log In"
+                onPress={handleLogin}
+                backgroundColor={Colors.pink}
+                textColor={Colors.darkPink}
+                width={186}
+                height={41}
+              />
+              <TouchableOpacity>
+                <BoldContentText style={{ color: Colors.black }}>Forgot Password?</BoldContentText>
               </TouchableOpacity>
             </View>
-          </View>
-        </KeyboardAvoidingView>
-      </TouchableWithoutFeedback>
-    </SafeAreaView>
+            <View style={styles.signUpContainer}>
+              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 5 }}>
+                <ContentText>Don't have an account?</ContentText>
+                <TouchableOpacity onPress={() => router.push('/authen/signup')}>
+                  <ContentText style={{ color: Colors.darkPink }}>Sign Up</ContentText>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </KeyboardAvoidingView>
+        </TouchableWithoutFeedback>
+      </SafeAreaView>
+    )
   );
 }
 
