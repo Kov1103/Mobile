@@ -9,10 +9,11 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 export default function CategoryScreen({ items = [] }: { items: Item[] }) {
     const params = useLocalSearchParams();
     const itemList = params.items ? JSON.parse(params.items as string) : [];
+    const category = (params.category ? params.category : 'All') as string;
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
-            <TitleHeader title="Category" showBackButton={true} />
+            <TitleHeader title={category} showBackButton={true} />
             <ScrollView contentContainerStyle={styles.container}>
                 <View style={styles.itemsWrapper}>
                     {itemList.map((item: Item, index: number) => (

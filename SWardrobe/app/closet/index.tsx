@@ -59,11 +59,12 @@ const ClosetContentScreen = ({ navigation }: any) => {
     return items.filter(item => item.category.includes(category));
   };
 
-  const handlePress = () => {
+  const handlePress = (category: string) => {
     router.push({
       pathname: '/closet/category',
       params: {
-        items: JSON.stringify(filteredItems(selectedCategory)),
+        category: category,
+        items: JSON.stringify(filteredItems(category)),
       },
     });
   };
@@ -112,7 +113,7 @@ const ClosetContentScreen = ({ navigation }: any) => {
                   <TitleText style={styles.titleText}>{category}</TitleText>
                   <SubtitleText style={{ color: Colors.darkPink, fontSize: 15 }}>{filteredItems(category).length}</SubtitleText>
                 </View>
-                <SwArrow direction="right" onPress={() => handlePress()} />
+                <SwArrow direction="right" onPress={() => handlePress(category)} />
               </View>
               <FlatList
                 data={filteredItems(category)}
