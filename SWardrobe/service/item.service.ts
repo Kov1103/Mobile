@@ -1,6 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Alert } from "react-native";
 
+
 export const uploadImage = async (imageUri: string, fileName: string) => {
   try {
     const token = await AsyncStorage.getItem('token');

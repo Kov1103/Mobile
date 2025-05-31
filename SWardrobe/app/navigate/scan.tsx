@@ -7,6 +7,7 @@ import { StyleSheet, View, Image, Alert } from "react-native";
 import { useScanContext } from "../../service/scan.context";
 import ScanResultModal from "@/components/ui/ItemDetailModal";
 import { uploadImage } from "@/service/item.service";
+import Loading from "@/components/loading";
 
 export default function ScanScreen() {
   const cameraRef = useRef<any>(null);
@@ -14,6 +15,7 @@ export default function ScanScreen() {
   const { state: scanState, dispatch } = useScanContext();
   const [modalVisible, setModalVisible] = useState(false);
   const [resultData, setResultData] = useState<any>(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (scanState.isScanning) {
@@ -67,6 +69,7 @@ export default function ScanScreen() {
         type: 'image/jpeg',
       } as any);
       try {
+        setLoading(true);
         const response = await uploadImage(uri, fileName);
 
         getItemData(response);
@@ -74,11 +77,16 @@ export default function ScanScreen() {
       } catch (err) {
         Alert.alert("Error", "Failed to upload image. Please try again.");
         console.error("❌ Upload error:", err);
+      } finally {
+        setLoading(false);
       }
     }
   }
 
   return (
+    loading ? (
+      <Loading text="Processing image..." />
+    ) :
     <View style={styles.container}>
       <TitleHeader title="Scan Your Clothes" />
       <CameraView style={styles.camera} ref={cameraRef}>
@@ -92,7 +100,7 @@ export default function ScanScreen() {
           setResultData(null);
         }}
       />
-    </View>
+    </View> 
   );
 }
 

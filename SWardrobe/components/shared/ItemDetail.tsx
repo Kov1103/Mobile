@@ -11,6 +11,7 @@ import SwButton from "./SwButton";
 import SwTextInput from "./SwTextInput";
 import { postItem } from "@/service/item.service";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import Loading from "../loading";
 interface ItemDetailProps {
   image: string;
   name: string;
@@ -23,6 +24,7 @@ const ItemDetailComponent: React.FC<ItemDetailProps> = ({ image, name, category,
   const [isEditing, setIsEditing] = useState(false);
   const [editedName, setEditedName] = useState(name);
   const inputRef = useRef<TextInput>(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     setEditedName(name);
@@ -43,15 +45,23 @@ const ItemDetailComponent: React.FC<ItemDetailProps> = ({ image, name, category,
       color: color,
       user_id: Number(userId)
     }
+    setLoading(true);
     postItem(payload).then((res) => {
       Alert.alert("Item added successfully!");
       onAddSuccess?.();
     }).catch((err) => {
       console.error("Error adding item:", err);
       Alert.alert("Failed to add item. Please try again.");
+    }).finally(() => {
+      setLoading(false);
     });
   }
   return (
+    loading ? (
+      <SafeAreaView style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <Loading text="Adding item..."/>
+      </SafeAreaView>
+    ) :
     <TouchableWithoutFeedback onPress={() => setIsEditing(false)} style={styles.container}>
       <View style={styles.containerArea}>
         <ItemImage image={image as string} />
