@@ -94,3 +94,26 @@ export const getAllItems = async (user_id = "1") => {
     throw error;
   }
 }
+
+export const getItem = async (id: number): Promise<any> => {
+  try {
+    const token = await AsyncStorage.getItem('token');
+    const response = await fetch(`${process.env.EXPO_PUBLIC_BASE_URL}/items/${id}`, {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Authorization': `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`Failed to fetch item: ${errorText}`);
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    throw error;
+  }
+};

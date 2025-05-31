@@ -27,7 +27,6 @@ const ItemDetailComponent: React.FC<ItemDetailProps> = ({ image, name, category,
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    setEditedName(name);
     if (isEditing) {
       setTimeout(() => {
         inputRef.current?.focus();
@@ -59,7 +58,7 @@ const ItemDetailComponent: React.FC<ItemDetailProps> = ({ image, name, category,
   return (
     loading ? (
       <SafeAreaView style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Loading text="Adding item..."/>
+        <Loading/>
       </SafeAreaView>
     ) :
     <TouchableWithoutFeedback onPress={() => setIsEditing(false)} style={styles.container}>

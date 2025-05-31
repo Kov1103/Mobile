@@ -75,9 +75,6 @@ export default function SignUp({ navigation }: SignUpProps) {
 
 
   return (
-    loading ? (
-      <Loading text="Signing up..." />
-    ) :
     <SafeAreaView style={styles.container}>
       <TitleHeader title="Create Account"></TitleHeader>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -85,7 +82,7 @@ export default function SignUp({ navigation }: SignUpProps) {
           behavior={Platform.select({ ios: 'padding', android: 'padding' })} enabled
         >
           <ScrollView
-          ref={scrollViewRef}
+            ref={scrollViewRef}
             contentContainerStyle={{ paddingBottom: 200 }}
             keyboardShouldPersistTaps="handled"
             showsVerticalScrollIndicator={false}
@@ -131,6 +128,9 @@ export default function SignUp({ navigation }: SignUpProps) {
           </ScrollView>
         </KeyboardAvoidingView>
       </TouchableWithoutFeedback>
+      {loading && (
+        <Loading />
+      )}
     </SafeAreaView>
   );
 }

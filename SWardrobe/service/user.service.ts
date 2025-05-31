@@ -16,7 +16,6 @@ export const getUser = async (id: number): Promise<any> => {
     }
 
     const data = await response.json();
-    await AsyncStorage.setItem('token', data.token);
     return data;
   } catch (error) {
     throw error;

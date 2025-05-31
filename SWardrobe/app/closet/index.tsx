@@ -80,61 +80,61 @@ const ClosetContentScreen = ({ navigation }: any) => {
   };
 
   return (
-    loading ? (
-      <Loading text="Loading items..." />
-    ) : 
-    <SafeAreaView style={{ backgroundColor: Colors.white, marginBottom: 40 }}>
-      <FlatList
-        data={categories}
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        renderItem={({ item: category, index }) => (
-          <View style={{ paddingVertical: 2, paddingHorizontal: 2 }}>
-            <SwButton
-              key={index}
-              label={category}
-              onPress={() => {
-                handleButtonPress({ name: category });
-              }}
-              backgroundColor={selectedCategory === category ? Colors.pink : Colors.white}
-              textColor={selectedCategory === category ? Colors.darkPink : Colors.darkPink}
-              style={{ margin: 2, marginLeft: index === 0 ? 10 : 2, height: 30, borderColor: !(selectedCategory === category) ? Colors.pink : undefined, borderWidth: !(selectedCategory === category) ? 1 : 0 }}
-              fontSize={12}
-            />
-          </View>
-        )}
-        keyExtractor={(item, index) => item + index}
-      />
-      <View style={{ height: 10 }} />
-      <ScrollView style={styles.container} >
-        {selectedItems.map((category, index) => (
-          <View key={category || index}>
-            <View style={styles.titleLine}>
-              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 20 }}>
-                <TitleText style={styles.titleText}>{category}</TitleText>
-                <SubtitleText style={{ color: Colors.darkPink, fontSize: 15 }}>{filteredItems(category).length}</SubtitleText>
-              </View>
-              <SwArrow direction="right" onPress={() => handlePress()} />
+    <View style={{ flex: 1 }}>
+      <SafeAreaView style={{ backgroundColor: Colors.white, marginBottom: 40 }}>
+        <FlatList
+          data={categories}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          renderItem={({ item: category, index }) => (
+            <View style={{ paddingVertical: 2, paddingHorizontal: 2 }}>
+              <SwButton
+                key={index}
+                label={category}
+                onPress={() => {
+                  handleButtonPress({ name: category });
+                }}
+                backgroundColor={selectedCategory === category ? Colors.pink : Colors.white}
+                textColor={selectedCategory === category ? Colors.darkPink : Colors.darkPink}
+                style={{ margin: 2, marginLeft: index === 0 ? 10 : 2, height: 30, borderColor: !(selectedCategory === category) ? Colors.pink : undefined, borderWidth: !(selectedCategory === category) ? 1 : 0 }}
+                fontSize={12}
+              />
             </View>
-            <FlatList
-              data={filteredItems(category)}
-              keyExtractor={(item) => item.id.toString()}
-              renderItem={({ item }) => (
-                <View style={{ marginBottom: 10 }}>
-                  <ItemCard item={item} />
+          )}
+          keyExtractor={(item, index) => item + index}
+        />
+        <View style={{ height: 10 }} />
+        <ScrollView style={styles.container} >
+          {selectedItems.map((category, index) => (
+            <View key={category || index}>
+              <View style={styles.titleLine}>
+                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 20 }}>
+                  <TitleText style={styles.titleText}>{category}</TitleText>
+                  <SubtitleText style={{ color: Colors.darkPink, fontSize: 15 }}>{filteredItems(category).length}</SubtitleText>
                 </View>
+                <SwArrow direction="right" onPress={() => handlePress()} />
+              </View>
+              <FlatList
+                data={filteredItems(category)}
+                keyExtractor={(item) => item.id.toString()}
+                renderItem={({ item }) => (
+                  <View style={{ marginBottom: 10 }}>
+                    <ItemCard item={item} />
+                  </View>
+                )}
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={{ paddingRight: 30 }}
+              />
+              {filteredItems(category).length === 0 && (
+                <Text style={styles.emptyText}>No items in this category</Text>
               )}
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              contentContainerStyle={{ paddingRight: 30 }}
-            />
-            {filteredItems(category).length === 0 && (
-              <Text style={styles.emptyText}>No items in this category</Text>
-            )}
-          </View>
-        ))}
-      </ScrollView>
-    </SafeAreaView>
+            </View>
+          ))}
+        </ScrollView>
+      </SafeAreaView>
+      {loading && <Loading />}
+    </View>
   );
 };
 

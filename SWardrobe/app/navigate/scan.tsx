@@ -16,6 +16,7 @@ export default function ScanScreen() {
   const [modalVisible, setModalVisible] = useState(false);
   const [resultData, setResultData] = useState<any>(null);
   const [loading, setLoading] = useState(false);
+  const [isCameraActive, setIsCameraActive] = useState(true);
 
   useEffect(() => {
     if (scanState.isScanning) {
@@ -70,6 +71,7 @@ export default function ScanScreen() {
       } as any);
       try {
         setLoading(true);
+        setIsCameraActive(false);
         const response = await uploadImage(uri, fileName);
 
         getItemData(response);
@@ -77,6 +79,7 @@ export default function ScanScreen() {
       } catch (err) {
         Alert.alert("Error", "Failed to upload image. Please try again.");
         console.error("❌ Upload error:", err);
+        setIsCameraActive(true);
       } finally {
         setLoading(false);
       }
@@ -84,23 +87,24 @@ export default function ScanScreen() {
   }
 
   return (
-    loading ? (
-      <Loading text="Processing image..." />
-    ) :
     <View style={styles.container}>
       <TitleHeader title="Scan Your Clothes" />
-      <CameraView style={styles.camera} ref={cameraRef}>
-        <Image source={require('../../assets/images/carrier.png')}></Image>
-      </CameraView>
+      {isCameraActive && (
+        <CameraView style={styles.camera} ref={cameraRef}>
+          <Image source={require('../../assets/images/carrier.png')} />
+        </CameraView>
+      )}
       <ScanResultModal
         visible={modalVisible}
         data={resultData}
         onClose={() => {
           setModalVisible(false);
           setResultData(null);
+          setIsCameraActive(true);
         }}
       />
-    </View> 
+      {loading && <Loading />}
+    </View>
   );
 }
 

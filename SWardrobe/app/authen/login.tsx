@@ -7,12 +7,12 @@ import TitleHeader from '@/components/shared/TitleHeader';
 import { Colors } from '@/constants/Colors';
 import { router } from 'expo-router';
 import React, { useState } from 'react';
-import { View, StyleSheet, KeyboardAvoidingView, Platform, Alert, TouchableOpacity, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import { View, StyleSheet, KeyboardAvoidingView, Platform, Alert, TouchableOpacity, TouchableWithoutFeedback, Keyboard, ActivityIndicator } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Loading from '@/components/loading';
 // import { logIn } from '@/service/user.service';
-import {api, logIn} from '@/middleware/auth';
+import { logIn } from '@/middleware/auth';
 interface LoginProps {
   navigation: any; // hoặc bạn dùng expo-router thì dùng useRouter
 }
@@ -37,7 +37,7 @@ export default function Login({ navigation }: LoginProps) {
     }
     try {
       setLoading(true);
-      
+
       const data = await logIn(email, password);
       if (data) {
         try {
@@ -45,17 +45,17 @@ export default function Login({ navigation }: LoginProps) {
           await AsyncStorage.setItem('id', user.id.toString());
         } catch (decodeErr) {
           console.error('JWT decode failed:', decodeErr);
-        } 
+        }
         Alert.alert('Success', `Logged in as ${email}`);
         router.push("/navigate/home");
       } else {
         console.error('Login failed: No token returned', data);
       }
-    } 
+    }
     catch (error) {
       const errorMessage =
         error instanceof Error ? error.message : 'An error occurred during login';
-        console.error('Login error:', errorMessage);
+      console.error('Login error:', errorMessage);
       Alert.alert('Error', errorMessage);
       return;
     }
@@ -65,11 +65,9 @@ export default function Login({ navigation }: LoginProps) {
   };
 
   return (
-    loading ? (
-      <Loading text="Logging in..." />
-    ) : (
-      <SafeAreaView style={styles.container}>
-        <TitleHeader title="Log In"></TitleHeader>
+    <SafeAreaView style={styles.container}>
+      <View style={{ flex: 1 }}>
+        <TitleHeader title="Log In" />
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <KeyboardAvoidingView style={styles.containerArea}
             behavior={Platform.select({ ios: 'padding', android: undefined })}
@@ -80,9 +78,10 @@ export default function Login({ navigation }: LoginProps) {
             </View>
 
             <View style={styles.inputContainer}>
-              <SwTextInput label="Email" type="email" placeholder='example@gmail.com' onChangeText={setEmail}></SwTextInput>
-              <SwTextInput label="Password" type="password" placeholder='Enter password' onChangeText={setPassword}></SwTextInput>
+              <SwTextInput label="Email" type="email" placeholder='example@gmail.com' onChangeText={setEmail} />
+              <SwTextInput label="Password" type="password" placeholder='Enter password' onChangeText={setPassword} />
             </View>
+
             <View style={styles.buttonContainer}>
               <SwButton
                 label="Log In"
@@ -96,6 +95,7 @@ export default function Login({ navigation }: LoginProps) {
                 <BoldContentText style={{ color: Colors.black }}>Forgot Password?</BoldContentText>
               </TouchableOpacity>
             </View>
+
             <View style={styles.signUpContainer}>
               <View style={{ flexDirection: 'row', alignItems: 'center', gap: 5 }}>
                 <ContentText>Don't have an account?</ContentText>
@@ -106,9 +106,14 @@ export default function Login({ navigation }: LoginProps) {
             </View>
           </KeyboardAvoidingView>
         </TouchableWithoutFeedback>
-      </SafeAreaView>
-    )
+      </View>
+
+      {loading && (
+        <Loading />
+      )}
+    </SafeAreaView>
   );
+
 }
 
 const styles = StyleSheet.create({
