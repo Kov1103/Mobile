@@ -51,17 +51,17 @@ export const logIn = async (email: string, password: string) => {
 
 
 export const signUp = async (full_name: string,
-        email: string,
-        password: string,
-        mobileNumber: string,
-        date: Date = new Date()): Promise<any> => {
+  email: string,
+  password: string,
+  mobileNumber: string,
+  date: Date = new Date()): Promise<any> => {
   try {
     const response = await fetch(`${process.env.EXPO_PUBLIC_BASE_URL}/users/register`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ email, password }),
+      body: JSON.stringify({ full_name, email, password, mobileNumber, date }),
     });
 
     if (!response.ok) {
@@ -70,19 +70,8 @@ export const signUp = async (full_name: string,
     }
 
     const data = await response.json();
-
-  if (!data || !data.access_token) {
-    throw new Error('No access_token returned from server');
+    return data;
   }
-
-  const token = data.access_token;
-  await AsyncStorage.setItem('token', token);
-
-  if (!token) {
-    throw new Error('No token returned from login');
-  }
-  return data;
-}
   catch (error) {
     console.error('Sign up error:', error);
     throw error;
