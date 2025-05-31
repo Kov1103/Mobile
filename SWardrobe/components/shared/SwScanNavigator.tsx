@@ -35,7 +35,7 @@ const tabs = [
     name: 'hanger',
     icon: require('../../assets/icon/Nav_Hanger.png'),
     iconActive: require('../../assets/icon/Nav_Hanger-picked.png'),
-    path: '/navigate/hanger',
+    path: '/navigate',
     isScan: false,
   },
   {
