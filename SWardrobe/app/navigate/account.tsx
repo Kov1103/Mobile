@@ -29,6 +29,7 @@ const ClosetScreen = ({ navigation }: any) => {
     async function logout() {
         try {
             await AsyncStorage.removeItem('id');
+            await AsyncStorage.removeItem('token');
             router.replace("/launch");
         } catch (err) {
             console.error("Error logging out:", err);

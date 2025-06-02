@@ -39,18 +39,8 @@ export default function Login({ navigation }: LoginProps) {
       setLoading(true);
 
       const data = await logIn(email, password);
-      if (data) {
-        try {
-          const user = data.user;
-          await AsyncStorage.setItem('id', user.id.toString());
-        } catch (decodeErr) {
-          console.error('JWT decode failed:', decodeErr);
-        }
-        Alert.alert('Success', `Logged in as ${email}`);
-        router.push("/navigate/home");
-      } else {
-        console.error('Login failed: No token returned', data);
-      }
+      Alert.alert('Success', `Logged in as ${email}`);
+      router.push("/navigate/home");
     }
     catch (error) {
       const errorMessage =

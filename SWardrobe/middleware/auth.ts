@@ -41,6 +41,8 @@ export const logIn = async (email: string, password: string) => {
 
   const token = data.access_token;
   await AsyncStorage.setItem('token', token);
+  await AsyncStorage.setItem('user_id', data.user.id.toString());
+
 
   if (!token) {
     throw new Error('No token returned from login');

@@ -26,48 +26,37 @@ export default function RootLayout() {
   useEffect(() => {
     let isMounted = true;
 
-    const prepare = async () => {
+    const initApp = async () => {
       try {
         const value = await AsyncStorage.getItem('hasSeenOnboarding');
+        const userId = await AsyncStorage.getItem('user_id');
+        const response = userId ? await getUser(Number(userId)) : null;
+
         if (isMounted) {
           setHasSeenOnboarding(value === 'true');
-        }
-        const userId = await AsyncStorage.getItem('id');
-        if (userId) {
-          const response = await getUser(Number(userId));
-          if (isMounted) {
-            setHasLogin(response.status >= 200 && response.status < 300);
+          setHasLogin(!!response);
+          if (fontsLoaded) {
+            await SplashScreen.hideAsync();
           }
-        } else {
-          if (isMounted) {
-            setHasLogin(false);
-          }
-        }
-        if (fontsLoaded && isMounted) {
-          await SplashScreen.hideAsync();
         }
       } catch (err) {
-        console.error('🔥 Error in prepare()', err);
+        console.error('🔥 Error in initApp()', err);
         if (isMounted) {
           setHasLogin(false);
           setHasSeenOnboarding(false);
-        }
-        if (fontsLoaded && isMounted) {
-          await SplashScreen.hideAsync();
+          if (fontsLoaded) {
+            await SplashScreen.hideAsync();
+          }
         }
       }
     };
 
-    prepare();
+    initApp();
 
     return () => {
       isMounted = false;
     };
   }, [fontsLoaded]);
-
-  // useEffect(() => {
-  //   AsyncStorage.removeItem('hasSeenOnboarding');
-  // }, []);
 
   if (!fontsLoaded || hasSeenOnboarding === null) {
     return null;
