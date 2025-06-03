@@ -1,5 +1,14 @@
 import React, { useEffect, useRef, useState } from "react";
-import { View, Text, StyleSheet, Image, TouchableOpacity, TextInput, TouchableWithoutFeedback, Alert } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  TextInput,
+  TouchableWithoutFeedback,
+  Alert,
+} from "react-native";
 import ItemImage from "@/components/closet/ItemImage";
 import SwTag from "@/components/shared/SwTag";
 import SwColor from "@/components/shared/SwColor";
@@ -20,7 +29,14 @@ interface ItemDetailProps {
   addButton?: boolean;
   onAddSuccess?: () => void;
 }
-const ItemDetailComponent: React.FC<ItemDetailProps> = ({ image, name, category, color, onAddSuccess = () => { }, addButton = true }) => {
+const ItemDetailComponent: React.FC<ItemDetailProps> = ({
+  image,
+  name,
+  category,
+  color,
+  onAddSuccess = () => {},
+  addButton = true,
+}) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editedName, setEditedName] = useState(name);
   const inputRef = useRef<TextInput>(null);
@@ -34,34 +50,40 @@ const ItemDetailComponent: React.FC<ItemDetailProps> = ({ image, name, category,
     }
   }, [isEditing]);
 
-
   async function addItem() {
-    const userId = await AsyncStorage.getItem('id');
+    const userId = await AsyncStorage.getItem("user_id");
     const payload = {
       image: [image],
       name: editedName,
       category: category,
       color: color,
-      user_id: Number(userId)
-    }
+      user_id: Number(userId),
+    };
     setLoading(true);
-    postItem(payload).then((res) => {
-      Alert.alert("Item added successfully!");
-      onAddSuccess?.();
-    }).catch((err) => {
-      console.error("Error adding item:", err);
-      Alert.alert("Failed to add item. Please try again.");
-    }).finally(() => {
-      setLoading(false);
-    });
+    postItem(payload)
+      .then((res) => {
+        Alert.alert("Item added successfully!");
+        onAddSuccess?.();
+      })
+      .catch((err) => {
+        console.error("Error adding item:", err);
+        Alert.alert("Failed to add item. Please try again.");
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   }
-  return (
-    loading ? (
-      <SafeAreaView style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Loading/>
-      </SafeAreaView>
-    ) :
-    <TouchableWithoutFeedback onPress={() => setIsEditing(false)} style={styles.container}>
+  return loading ? (
+    <SafeAreaView
+      style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+    >
+      <Loading />
+    </SafeAreaView>
+  ) : (
+    <TouchableWithoutFeedback
+      onPress={() => setIsEditing(false)}
+      style={styles.container}
+    >
       <View style={styles.containerArea}>
         <ItemImage image={image as string} />
         <View style={styles.nameContainer}>
@@ -84,7 +106,10 @@ const ItemDetailComponent: React.FC<ItemDetailProps> = ({ image, name, category,
 
           {!isEditing && addButton && (
             <TouchableOpacity onPress={() => setIsEditing(true)}>
-              <Image style={{ width: 20, height: 20 }} source={require('../../assets/icon/Bot-Edit.png')} />
+              <Image
+                style={{ width: 20, height: 20 }}
+                source={require("../../assets/icon/Bot-Edit.png")}
+              />
             </TouchableOpacity>
           )}
         </View>
@@ -112,35 +137,42 @@ const ItemDetailComponent: React.FC<ItemDetailProps> = ({ image, name, category,
         </View>
         {addButton && (
           <View style={styles.buttonContainer}>
-            <SwButton label="Add" onPress={addItem} backgroundColor={Colors.pink} textColor={Colors.darkPink} width="50%" height={41}></SwButton>
+            <SwButton
+              label="Add"
+              onPress={addItem}
+              backgroundColor={Colors.pink}
+              textColor={Colors.darkPink}
+              width="50%"
+              height={41}
+            ></SwButton>
           </View>
         )}
       </View>
     </TouchableWithoutFeedback>
   );
-}
+};
 
 export default ItemDetailComponent;
 
 const styles = StyleSheet.create({
   container: {
-    justifyContent: 'flex-start',
-    alignItems: 'center',
+    justifyContent: "flex-start",
+    alignItems: "center",
   },
   containerArea: {
     flex: 1,
-    flexDirection: 'column',
+    flexDirection: "column",
     marginTop: 20,
     paddingHorizontal: 40,
   },
   nameContainer: {
-    flexDirection: 'row',
+    flexDirection: "row",
     gap: 10,
     marginTop: 20,
   },
   nameInput: {
     height: 30,
-    paddingVertical: 0
+    paddingVertical: 0,
   },
   text: {
     fontSize: 15,
@@ -152,19 +184,19 @@ const styles = StyleSheet.create({
     color: Colors.black,
   },
   line: {
-    display: 'flex',
-    flexDirection: 'column',
+    display: "flex",
+    flexDirection: "column",
     marginVertical: 4,
   },
   itemLine: {
-    flexDirection: 'row',
+    flexDirection: "row",
     gap: 10,
     marginVertical: 5,
-    flexWrap: 'wrap',
+    flexWrap: "wrap",
   },
   buttonContainer: {
     flex: 1,
-    alignItems: 'center',
+    alignItems: "center",
     marginTop: 20,
-  }
+  },
 });
