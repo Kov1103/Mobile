@@ -1,43 +1,50 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, SafeAreaView, ScrollView, Dimensions, FlatList } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useRouter } from 'expo-router';
-import SwArrow from '@/components/shared/SwArrow';
-import { Colors } from '@/constants/Colors';
-import { Item } from '@/constants/Item';
-import SwButton from '@/components/shared/SwButton';
-import ItemCard from '@/components/closet/ItemCard';
-import TitleText from '@/components/shared/text/TitleText';
-import SubtitleText from '@/components/shared/text/SubtitleText';
-import { getAllItems } from '@/service/item.service';
-import Loading from '@/components/loading';
+import React, { useEffect, useState } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  SafeAreaView,
+  ScrollView,
+  Dimensions,
+  FlatList,
+} from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useRouter } from "expo-router";
+import SwArrow from "@/components/shared/SwArrow";
+import { Colors } from "@/constants/Colors";
+import { Item } from "@/constants/Item";
+import SwButton from "@/components/shared/SwButton";
+import ItemCard from "@/components/closet/ItemCard";
+import TitleText from "@/components/shared/text/TitleText";
+import SubtitleText from "@/components/shared/text/SubtitleText";
+import { getAllItems } from "@/service/item.service";
+import Loading from "@/components/loading";
 
 const ClosetContentScreen = ({ navigation }: any) => {
   const router = useRouter();
   const [items, setItems] = useState<Item[]>([]);
-  const [categories, setCategories] = useState<string[]>(['All']);
-  const [selectedCategory, setSelectedCategory] = useState('All');
+  const [categories, setCategories] = useState<string[]>(["All"]);
+  const [selectedCategory, setSelectedCategory] = useState("All");
   const [selectedItems, setSelectedItems] = useState<string[]>(categories);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchItems = async () => {
       try {
-        const id = await AsyncStorage.getItem('id');
+        const id = await AsyncStorage.getItem("user_id");
         if (!id) {
-          console.warn('User ID not found in AsyncStorage');
+          console.warn("User ID not found in AsyncStorage");
           return;
         }
 
         setLoading(true);
         const data = await getAllItems(id);
         setItems(data);
-        setCategories(['All', ...getCategories(data)]);
-        setSelectedItems(['All', ...getCategories(data)]);
+        setCategories(["All", ...getCategories(data)]);
+        setSelectedItems(["All", ...getCategories(data)]);
       } catch (error) {
-        console.error('Error fetching items:', error);
-      }
-      finally {
+        console.error("Error fetching items:", error);
+      } finally {
         setLoading(false);
       }
     };
@@ -47,7 +54,7 @@ const ClosetContentScreen = ({ navigation }: any) => {
 
   const getCategories = (items: Item[]): string[] => {
     const categorySet = new Set(
-      items.flatMap(item =>
+      items.flatMap((item) =>
         Array.isArray(item.category) ? item.category : [item.category]
       )
     );
@@ -55,13 +62,13 @@ const ClosetContentScreen = ({ navigation }: any) => {
   };
 
   const filteredItems = (category: string) => {
-    if (category === 'All') return items;
-    return items.filter(item => item.category.includes(category));
+    if (category === "All") return items;
+    return items.filter((item) => item.category.includes(category));
   };
 
   const handlePress = (category: string) => {
     router.push({
-      pathname: '/closet/category',
+      pathname: "/closet/category",
       params: {
         category: category,
         items: JSON.stringify(filteredItems(category)),
@@ -70,11 +77,10 @@ const ClosetContentScreen = ({ navigation }: any) => {
   };
 
   const handleButtonPress = ({ name }: { name: string }) => {
-    if (name === 'All') {
+    if (name === "All") {
       setSelectedItems(categories);
-      setSelectedCategory('All');
-    }
-    else {
+      setSelectedCategory("All");
+    } else {
       setSelectedItems([name]);
       setSelectedCategory(name);
     }
@@ -95,9 +101,23 @@ const ClosetContentScreen = ({ navigation }: any) => {
                 onPress={() => {
                   handleButtonPress({ name: category });
                 }}
-                backgroundColor={selectedCategory === category ? Colors.pink : Colors.white}
-                textColor={selectedCategory === category ? Colors.darkPink : Colors.darkPink}
-                style={{ margin: 2, marginLeft: index === 0 ? 10 : 2, height: 30, borderColor: !(selectedCategory === category) ? Colors.pink : undefined, borderWidth: !(selectedCategory === category) ? 1 : 0 }}
+                backgroundColor={
+                  selectedCategory === category ? Colors.pink : Colors.white
+                }
+                textColor={
+                  selectedCategory === category
+                    ? Colors.darkPink
+                    : Colors.darkPink
+                }
+                style={{
+                  margin: 2,
+                  marginLeft: index === 0 ? 10 : 2,
+                  height: 30,
+                  borderColor: !(selectedCategory === category)
+                    ? Colors.pink
+                    : undefined,
+                  borderWidth: !(selectedCategory === category) ? 1 : 0,
+                }}
                 fontSize={12}
               />
             </View>
@@ -105,15 +125,28 @@ const ClosetContentScreen = ({ navigation }: any) => {
           keyExtractor={(item, index) => item + index}
         />
         <View style={{ height: 10 }} />
-        <ScrollView style={styles.container} >
+        <ScrollView style={styles.container}>
           {selectedItems.map((category, index) => (
             <View key={category || index}>
               <View style={styles.titleLine}>
-                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 20 }}>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    gap: 20,
+                  }}
+                >
                   <TitleText style={styles.titleText}>{category}</TitleText>
-                  <SubtitleText style={{ color: Colors.darkPink, fontSize: 15 }}>{filteredItems(category).length}</SubtitleText>
+                  <SubtitleText
+                    style={{ color: Colors.darkPink, fontSize: 15 }}
+                  >
+                    {filteredItems(category).length}
+                  </SubtitleText>
                 </View>
-                <SwArrow direction="right" onPress={() => handlePress(category)} />
+                <SwArrow
+                  direction="right"
+                  onPress={() => handlePress(category)}
+                />
               </View>
               <FlatList
                 data={filteredItems(category)}
@@ -143,15 +176,15 @@ export default ClosetContentScreen;
 
 const styles = StyleSheet.create({
   container: {
-    display: 'flex',
-    flexDirection: 'column',
-    width: Dimensions.get('window').width,
+    display: "flex",
+    flexDirection: "column",
+    width: Dimensions.get("window").width,
     backgroundColor: Colors.white,
   },
   titleLine: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     paddingVertical: 10,
     paddingHorizontal: 20,
     marginBottom: 10,
@@ -161,12 +194,12 @@ const styles = StyleSheet.create({
     color: Colors.pink,
   },
   emptyText: {
-    fontStyle: 'italic',
-    color: '#aaa',
+    fontStyle: "italic",
+    color: "#aaa",
     paddingLeft: 10,
   },
   scrollContent: {
-    alignItems: 'flex-start', // aligns children to the start horizontally
-    justifyContent: 'flex-start', // optional: aligns to top vertically (default)
-  }
+    alignItems: "flex-start", // aligns children to the start horizontally
+    justifyContent: "flex-start", // optional: aligns to top vertically (default)
+  },
 });
